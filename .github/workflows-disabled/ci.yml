@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 permissions:
@@ -69,7 +69,7 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential cmake pkg-config perl python3 libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind-dev liblzma-dev libreadline-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev libboost-chrono-dev libboost-date-time-dev libboost-filesystem-dev libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev
 
-      - name: Install unbound source # CMakeLists includes ~/unbound-1.22.0/libunbound for unbound.h
+      - name: Install unbound source
         run: |
           wget -q https://nlnetlabs.nl/downloads/unbound/unbound-1.22.0.tar.gz
           echo "c5dd1bdef5d5685b2cedb749158dd152c52d44f65529a34ac15cd88d4b1b3d43  unbound-1.22.0.tar.gz" | sha256sum -c
@@ -120,6 +120,8 @@ jobs:
         run: |
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN=$EMSDK/upstream/emscripten
+          export C_INCLUDE_PATH="$HOME/unbound-1.22.0/libunbound:${C_INCLUDE_PATH:-}"
+          export CPLUS_INCLUDE_PATH="$HOME/unbound-1.22.0/libunbound:${CPLUS_INCLUDE_PATH:-}"
           ./bin/build_dist.sh
 
       - name: Test dist
@@ -128,5 +130,5 @@ jobs:
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
-          name: monero-ts-dist
+          name: qwertycoin-ts-dist
           path: dist/

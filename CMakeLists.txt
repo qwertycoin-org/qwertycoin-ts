@@ -58,6 +58,7 @@ include_directories("${MONERO_PROJECT}/external/easylogging++")
 include_directories("${MONERO_PROJECT}/external/rapidjson/include")
 include_directories("${MONERO_PROJECT}/external/unbound/libunbound")
 include_directories("${MONERO_PROJECT}/external/db_drivers/liblmdb")
+include_directories("${MONERO_PROJECT}/external/randomx/src")
 include_directories("${MONERO_PROJECT}/contrib/epee/include")
 include_directories("${MONERO_PROJECT}/contrib/epee/include/net")
 
@@ -74,7 +75,8 @@ include_directories("${CMAKE_BINARY_DIR}/generated_include")
 # Unbound
 #############
 
-include_directories("~/unbound-1.22.0/libunbound")
+set(UNBOUND_SOURCE_INCLUDE "$ENV{HOME}/unbound-1.22.0/libunbound")
+include_directories("${UNBOUND_SOURCE_INCLUDE}")
 
 #############
 # OpenSSL
@@ -143,6 +145,16 @@ set_target_properties(
     ${BOOST}/lib/libboost_regex.a
 )
 
+#############
+# RandomX
+#############
+
+add_subdirectory(
+    "${MONERO_PROJECT}/external/randomx"
+    "${CMAKE_BINARY_DIR}/randomx"
+    EXCLUDE_FROM_ALL
+)
+
 #add_library(boost_atomic STATIC IMPORTED)
 #set_target_properties(
     #boost_atomic PROPERTIES IMPORTED_LOCATION
@@ -178,6 +190,7 @@ set(
     ${MONERO_PROJECT_SRC}/crypto/crypto.cpp
     ${MONERO_PROJECT_SRC}/crypto/hash.c
     ${MONERO_PROJECT_SRC}/crypto/slow-hash.c
+    ${MONERO_PROJECT_SRC}/crypto/rx-slow-hash.c
     ${MONERO_PROJECT_SRC}/crypto/oaes_lib.c
     ${MONERO_PROJECT_SRC}/crypto/crypto-ops.c
     ${MONERO_PROJECT_SRC}/crypto/crypto-ops-data.c
@@ -345,6 +358,7 @@ target_link_libraries(
     boost_serialization
     boost_filesystem
     boost_regex
+    randomx
     #boost_atomic
     #
     ${log-lib}
