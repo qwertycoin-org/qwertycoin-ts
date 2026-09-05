@@ -1,0 +1,20 @@
+qwertycoin-ts
+==============
+
+This repository is derived from woodser/monero-ts.
+
+Upstream:
+- https://github.com/woodser/monero-ts
+
+Wallet bridge:
+- external/monero-cpp points to the Qwertycoin bridge fork:
+  https://github.com/qwertycoin-org/qwertycoin-cpp
+
+Core submodule:
+- qwertycoin-cpp/external/monero-project points to the Qwertycoin v2 core
+  repository at the pinned commit recorded by the submodule.
+
+Licensing:
+- The original monero-ts project is MIT licensed.
+- Existing upstream copyright and license notices are retained.
+- Qwertycoin-specific changes are Copyright (c) 2026 The Qwertycoin Project.
