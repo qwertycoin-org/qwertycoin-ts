@@ -15,7 +15,14 @@ rm -rf ~/.emscripten_cache || exit 1
 HOST_NCORES=$(nproc 2>/dev/null || shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 [ -d build ] || mkdir -p build || exit 1
 cd build || exit 1
-emcmake cmake .. || exit 1
+set -- ..
+if [ -n "${QWC_CORE_REVISION:-}" ]; then
+  set -- "$@" "-DQWC_CORE_REVISION=${QWC_CORE_REVISION}"
+fi
+if [ -n "${QWC_UNBOUND_SOURCE_INCLUDE:-}" ]; then
+  set -- "$@" "-DQWC_UNBOUND_SOURCE_INCLUDE=${QWC_UNBOUND_SOURCE_INCLUDE}"
+fi
+emcmake cmake "$@" || exit 1
 emmake cmake --build . -j$HOST_NCORES || exit 1
 cd ..
 
