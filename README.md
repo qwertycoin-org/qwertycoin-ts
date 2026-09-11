@@ -160,8 +160,10 @@ Compiled WebAssembly binaries are committed to ./dist for convenience, but these
 2. Clone monero-ts repository: `git clone --recursive https://github.com/woodser/monero-ts.git`
 3. `cd monero-ts`
 4. `./bin/update_submodules.sh`
-5. Build the monero-cpp submodule (located at ./external/monero-cpp) by following [instructions](https://github.com/woodser/monero-cpp#using-monero-cpp-in-your-project) for your system. This will ensure all dependencies are installed. Be sure to install unbound 1.19.0 to your home directory (`~/unbound-1.19.0`).
-6. `./bin/build_all.sh` (install [monero-project dependencies](https://github.com/monero-project/monero#dependencies) as needed for your system)
+5. Build the monero-cpp submodule (located at ./external/monero-cpp) by following [instructions](https://github.com/woodser/monero-cpp#using-monero-cpp-in-your-project) for your system. This will ensure all dependencies are installed.
+6. Download and verify the Unbound 1.22.0 source archive used by CI, then set `QWC_UNBOUND_SOURCE_INCLUDE` to its `libunbound` directory. The expected archive SHA-256 is `c5dd1bdef5d5685b2cedb749158dd152c52d44f65529a34ac15cd88d4b1b3d43`.
+7. For a source snapshot without Git metadata, set `QWC_CORE_REVISION` to the pinned 9–40 character lowercase core commit id.
+8. `./bin/build_all.sh` (install [monero-project dependencies](https://github.com/monero-project/monero#dependencies) as needed for your system)
 
 ## Running tests
 

@@ -34,9 +34,37 @@ include_directories("${MONERO_CPP}/external/libsodium/include/sodium")
 set(MONERO_PROJECT "${MONERO_CPP}/external/monero-project")
 set(MONERO_PROJECT_SRC "${MONERO_PROJECT}/src")
 
-# generate version.cpp from monero-project git state for MONERO_VERSION* symbols
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/${MONERO_PROJECT}/cmake")
-include("${CMAKE_SOURCE_DIR}/${MONERO_PROJECT}/cmake/Version.cmake")
+# Generate version.cpp from the pinned monero-project source tree.  The core's
+# Version.cmake assumes it is included from the core's own top-level project;
+# when included here it incorrectly treats qwertycoin-ts as SOURCE_DIR and
+# looks for qwertycoin-ts/src/version.cpp.in.  Accept an explicit revision for
+# immutable source snapshots, otherwise derive it from the pinned submodule.
+set(QWC_CORE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/${MONERO_PROJECT}")
+if(NOT DEFINED QWC_CORE_REVISION OR QWC_CORE_REVISION STREQUAL "")
+  find_package(Git QUIET)
+  if(GIT_FOUND OR Git_FOUND)
+    execute_process(
+      COMMAND "${GIT_EXECUTABLE}" -C "${QWC_CORE_SOURCE_DIR}" rev-parse --short=9 HEAD
+      RESULT_VARIABLE QWC_CORE_GIT_RESULT
+      OUTPUT_VARIABLE QWC_CORE_REVISION
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+endif()
+if(NOT DEFINED QWC_CORE_REVISION OR QWC_CORE_REVISION STREQUAL "" OR
+   (DEFINED QWC_CORE_GIT_RESULT AND NOT QWC_CORE_GIT_RESULT EQUAL 0))
+  message(FATAL_ERROR "QWC_CORE_REVISION is required when building from a source snapshot")
+endif()
+string(LENGTH "${QWC_CORE_REVISION}" QWC_CORE_REVISION_LENGTH)
+if(NOT QWC_CORE_REVISION MATCHES "^[0-9a-f]+$" OR
+   QWC_CORE_REVISION_LENGTH LESS 9 OR QWC_CORE_REVISION_LENGTH GREATER 40)
+  message(FATAL_ERROR "QWC_CORE_REVISION must be a 9-40 character lowercase Git object id")
+endif()
+set(VERSIONTAG "${QWC_CORE_REVISION}")
+set(VERSION_IS_RELEASE "false")
+configure_file(
+  "${QWC_CORE_SOURCE_DIR}/src/version.cpp.in"
+  "${CMAKE_BINARY_DIR}/version.cpp"
+  @ONLY)
 
 # headers
 include_directories("src/main/cpp")
@@ -75,8 +103,14 @@ include_directories("${CMAKE_BINARY_DIR}/generated_include")
 # Unbound
 #############
 
-set(UNBOUND_SOURCE_INCLUDE "$ENV{HOME}/unbound-1.22.0/libunbound")
-include_directories("${UNBOUND_SOURCE_INCLUDE}")
+if(NOT DEFINED QWC_UNBOUND_SOURCE_INCLUDE OR QWC_UNBOUND_SOURCE_INCLUDE STREQUAL "")
+  set(QWC_UNBOUND_SOURCE_INCLUDE "$ENV{HOME}/unbound-1.22.0/libunbound")
+endif()
+if(NOT EXISTS "${QWC_UNBOUND_SOURCE_INCLUDE}/unbound.h")
+  message(FATAL_ERROR
+    "QWC_UNBOUND_SOURCE_INCLUDE must point to the verified Unbound 1.22.0 libunbound source directory")
+endif()
+include_directories("${QWC_UNBOUND_SOURCE_INCLUDE}")
 
 #############
 # OpenSSL
