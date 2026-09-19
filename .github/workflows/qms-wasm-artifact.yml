@@ -1,0 +1,128 @@
+name: QMS WebAssembly artifact
+
+on:
+  push:
+    branches:
+      - feature/qms-web-wasm
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qms-wasm-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dist:
+    name: pinned QWC WASM dist
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout immutable source graph
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Verify source pins
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git -C external/monero-cpp rev-parse HEAD)" = "bd63c9e3320396964cc7be0d48a88efa532dc060"
+          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "e6e0b46b6603bc5c1402df63696b514ba735f8ee"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install native build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential cmake pkg-config perl python3 libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind-dev liblzma-dev libreadline-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev libboost-chrono-dev libboost-date-time-dev libboost-filesystem-dev libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev
+
+      - name: Install verified Unbound source
+        shell: bash
+        run: |
+          set -euo pipefail
+          wget -q https://nlnetlabs.nl/downloads/unbound/unbound-1.22.0.tar.gz
+          echo "c5dd1bdef5d5685b2cedb749158dd152c52d44f65529a34ac15cd88d4b1b3d43  unbound-1.22.0.tar.gz" | sha256sum -c
+          tar xzf unbound-1.22.0.tar.gz -C "${HOME}"
+
+      - name: Install pinned Emscripten SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init emsdk
+          git -C emsdk remote add origin https://github.com/emscripten-core/emsdk.git
+          git -C emsdk fetch --depth 1 origin a72a42afc3700174023ade6bf83aa79892bb783c
+          git -C emsdk checkout --detach FETCH_HEAD
+          ./emsdk/emsdk install 3.1.66
+          ./emsdk/emsdk activate 3.1.66
+
+      - name: Generate pinned Core translations
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S external/monero-cpp/external/monero-project -B external/monero-cpp/external/monero-project/build/release -D CMAKE_BUILD_TYPE=Release -D MONERO_WALLET_CRYPTO_LIBRARY=cn
+          cmake --build external/monero-cpp/external/monero-project/build/release --target generate_translations_header
+
+      - name: Cache Emscripten Boost and OpenSSL
+        id: emscripten-libs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            build/boost
+            build/openssl
+          key: emscripten-3.1.66-v2-${{ hashFiles('bin/build_boost_emscripten.sh', 'bin/build_openssl_emscripten.sh', 'bin/download_deps.sh') }}
+
+      - name: Build Emscripten Boost and OpenSSL
+        if: steps.emscripten-libs.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          source ./emsdk/emsdk_env.sh
+          export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
+          ./bin/build_boost_emscripten.sh
+          rm build/boost/include
+          mkdir build/boost/include
+          cp -R external/monero-cpp/external/boost-sdk/boost build/boost/include/
+          ./bin/build_openssl_emscripten.sh
+
+      - name: Build pinned distribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          source ./emsdk/emsdk_env.sh
+          export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
+          export QWC_CORE_REVISION="e6e0b46b6603bc5c1402df63696b514ba735f8ee"
+          export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
+          ./bin/build_dist.sh
+          npm run test:qwc-utils
+
+      - name: Record artifact evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum dist/monero.js dist/monero.worker.js dist/monero.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
+          {
+            echo "qwertycoin_ts_revision=${GITHUB_SHA}"
+            echo "qwertycoin_cpp_revision=$(git -C external/monero-cpp rev-parse HEAD)"
+            echo "core_revision=$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)"
+            echo "emsdk_revision=$(git -C emsdk rev-parse HEAD)"
+          } > dist/QMS-WASM-SOURCES
+
+      - name: Upload reviewed distribution
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: qms-qwertycoin-ts-dist-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
