@@ -34,8 +34,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/monero-cpp rev-parse HEAD)" = "e3c747fb87aa1a494382af10c1b94a465f7fb2c6"
-          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "c7596a1f8457fe74ff5ce50fd471f43dcb96df44"
+          test "$(git -C external/monero-cpp rev-parse HEAD)" = "74b2d2beed33ca643c6fe3760d9c48228acc2d03"
+          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "48d853c41824fa30ce1149af15ecc2841aa6b784"
           grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/monero-cpp/external/monero-project/src/qms/crypto/Cargo.lock
 
       - name: Setup Node.js
@@ -114,7 +114,7 @@ jobs:
           npm ci
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
-          export QWC_CORE_REVISION="c7596a1f8457fe74ff5ce50fd471f43dcb96df44"
+          export QWC_CORE_REVISION="48d853c41824fa30ce1149af15ecc2841aa6b784"
           export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
           ./bin/build_dist.sh
           RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
