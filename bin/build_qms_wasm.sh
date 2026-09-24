@@ -14,7 +14,7 @@ EXPECTED_RUST="1.98.1"
 EXPECTED_ABI="3"
 export RUSTUP_TOOLCHAIN="${RUSTUP_TOOLCHAIN:-${EXPECTED_RUST}}"
 
-test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "c7596a1f8457fe74ff5ce50fd471f43dcb96df44"
+test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "383852dff02ca175a64bcd774f1733b5f32e5dcc"
 "${CARGO_BIN}" --version
 "${RUSTC_BIN}" --version | grep -F "rustc ${EXPECTED_RUST}"
 
