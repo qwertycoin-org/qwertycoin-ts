@@ -11,10 +11,10 @@ RUSTC_BIN="${RUSTC:-rustc}"
 WASM_BINDGEN_BIN="${WASM_BINDGEN:-wasm-bindgen}"
 
 EXPECTED_RUST="1.98.1"
-EXPECTED_ABI="2"
+EXPECTED_ABI="3"
 export RUSTUP_TOOLCHAIN="${RUSTUP_TOOLCHAIN:-${EXPECTED_RUST}}"
 
-test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "cbf96b0abe2717734144d18e3276f466ad21e203"
+test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "c7596a1f8457fe74ff5ce50fd471f43dcb96df44"
 "${CARGO_BIN}" --version
 "${RUSTC_BIN}" --version | grep -F "rustc ${EXPECTED_RUST}"
 
