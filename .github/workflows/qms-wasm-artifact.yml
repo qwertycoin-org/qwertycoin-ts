@@ -31,14 +31,23 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/monero-cpp rev-parse HEAD)" = "d4a8cc78ac80e96a2e362ac0ad2630bf99a0759c"
-          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "890e295f02ca1e6e989221ccf97c2ec24fbec52c"
+          test "$(git -C external/monero-cpp rev-parse HEAD)" = "fb5c0bbad667b8112e21e40b973152b5d766c2d1"
+          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "9d7da9eda821eb01a98f4a7f4efb067de2d47cb5"
+          grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/monero-cpp/external/monero-project/src/qms/crypto/Cargo.lock
 
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
           cache: npm
+
+      - name: Setup pinned Rust and wasm-bindgen
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.98.1 --profile minimal --target wasm32-unknown-unknown
+          rustc +1.98.1 --version | grep -F 'rustc 1.98.1'
+          cargo +1.98.1 install wasm-bindgen-cli --version 0.2.126 --locked
 
       - name: Install native build dependencies
         shell: bash
@@ -102,9 +111,10 @@ jobs:
           npm ci
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
-          export QWC_CORE_REVISION="890e295f02ca1e6e989221ccf97c2ec24fbec52c"
+          export QWC_CORE_REVISION="9d7da9eda821eb01a98f4a7f4efb067de2d47cb5"
           export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
           ./bin/build_dist.sh
+          RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
           npm run test:qwc-utils
 
       - name: Record artifact evidence
@@ -112,10 +122,14 @@ jobs:
         run: |
           set -euo pipefail
           sha256sum dist/monero.js dist/monero.worker.js dist/monero.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
+          sha256sum -c dist/qms2/QMS2-SHA256SUMS
           {
             echo "qwertycoin_ts_revision=${GITHUB_SHA}"
             echo "qwertycoin_cpp_revision=$(git -C external/monero-cpp rev-parse HEAD)"
             echo "core_revision=$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)"
+            echo "libsignal_revision=e8cc2dddd578859b4a029c9c94670b24ce2b616a"
+            echo "rust_version=$(rustc +1.98.1 --version)"
+            echo "wasm_bindgen_version=$(wasm-bindgen --version)"
             echo "emsdk_revision=$(git -C emsdk rev-parse HEAD)"
           } > dist/QMS-WASM-SOURCES
 
