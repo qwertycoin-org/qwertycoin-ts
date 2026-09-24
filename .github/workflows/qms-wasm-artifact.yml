@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - feature/qms-web-wasm
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -31,8 +34,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/monero-cpp rev-parse HEAD)" = "fb5c0bbad667b8112e21e40b973152b5d766c2d1"
-          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "9d7da9eda821eb01a98f4a7f4efb067de2d47cb5"
+          test "$(git -C external/monero-cpp rev-parse HEAD)" = "9eb79f821f1a3f71c0dc07b9388154aaca7b3d9e"
+          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "cbf96b0abe2717734144d18e3276f466ad21e203"
           grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/monero-cpp/external/monero-project/src/qms/crypto/Cargo.lock
 
       - name: Setup Node.js
@@ -111,7 +114,7 @@ jobs:
           npm ci
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
-          export QWC_CORE_REVISION="9d7da9eda821eb01a98f4a7f4efb067de2d47cb5"
+          export QWC_CORE_REVISION="cbf96b0abe2717734144d18e3276f466ad21e203"
           export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
           ./bin/build_dist.sh
           RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
@@ -122,7 +125,7 @@ jobs:
         run: |
           set -euo pipefail
           sha256sum dist/monero.js dist/monero.worker.js dist/monero.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
-          sha256sum -c dist/qms2/QMS2-SHA256SUMS
+          (cd dist/qms2 && sha256sum -c QMS2-SHA256SUMS)
           {
             echo "qwertycoin_ts_revision=${GITHUB_SHA}"
             echo "qwertycoin_cpp_revision=$(git -C external/monero-cpp rev-parse HEAD)"

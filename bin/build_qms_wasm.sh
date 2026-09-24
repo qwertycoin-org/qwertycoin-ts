@@ -48,11 +48,14 @@ install -m 0644 "${WEB_TMP}/qwc_qms_crypto_bg.wasm.d.ts" "${OUT_DIR}/qwc_qms_cry
 install -m 0644 "${CRATE_DIR}/LICENSE" "${OUT_DIR}/LICENSE.qwc-qms-crypto"
 install -m 0644 "${CRATE_DIR}/THIRD_PARTY.md" "${OUT_DIR}/THIRD_PARTY.qwc-qms-crypto.md"
 
-sha256sum \
-  "${OUT_DIR}/qwc_qms_crypto.js" \
-  "${OUT_DIR}/qwc_qms_crypto_bg.wasm" \
-  "${OUT_DIR}/qwc_qms_crypto.d.ts" \
-  "${OUT_DIR}/qwc_qms_crypto_bg.wasm.d.ts" \
-  "${OUT_DIR}/LICENSE.qwc-qms-crypto" \
-  "${OUT_DIR}/THIRD_PARTY.qwc-qms-crypto.md" \
-  > "${OUT_DIR}/QMS2-SHA256SUMS"
+(
+  cd "${OUT_DIR}"
+  sha256sum \
+    qwc_qms_crypto.js \
+    qwc_qms_crypto_bg.wasm \
+    qwc_qms_crypto.d.ts \
+    qwc_qms_crypto_bg.wasm.d.ts \
+    LICENSE.qwc-qms-crypto \
+    THIRD_PARTY.qwc-qms-crypto.md \
+    > QMS2-SHA256SUMS
+)
