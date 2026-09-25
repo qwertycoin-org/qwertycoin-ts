@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/qwertycoin-cpp rev-parse HEAD)" = "7320a14f7b84cec51667516421d922acd34ee52a"
+          test "$(git -C external/qwertycoin-cpp rev-parse HEAD)" = "6648ca39a7d2982fa0b13eb72f11e5b98e81417c"
           test "$(git -C external/qwertycoin-cpp/external/qwertycoin-core rev-parse HEAD)" = "efd0667129d52c89157cb36241a703c3becfb52f"
           grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/qwertycoin-cpp/external/qwertycoin-core/src/qms/crypto/Cargo.lock
 

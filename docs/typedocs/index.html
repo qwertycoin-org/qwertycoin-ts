@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>monero-ts</title><meta name="description" content="Documentation for monero-ts"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>qwertycoin-ts</title><meta name="description" content="Documentation for qwertycoin-ts"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base=".">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -6,118 +6,65 @@
 <div id="tsd-toolbar-links"></div></div>
 <ul class="results">
 <li class="state loading">Preparing search index...</li>
-<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">monero-ts</a></div>
+<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">qwertycoin-ts</a></div>
 <div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-menu"></use></svg></a></div></div></header>
 <div class="container container-main">
 <div class="col-content">
 <div class="tsd-page-title">
-<h2>monero-ts</h2></div>
-<div class="tsd-panel tsd-typography"><a id="md:monero-typescript-library" class="tsd-anchor"></a><h1><a href="#md:monero-typescript-library">Monero TypeScript Library</a></h1><p>A TypeScript library for creating Monero applications using RPC or WebAssembly bindings to <a href="https://github.com/monero-project/monero/tree/v0.18.5.1">monero v0.18.5.1 &#39;Fluorine Fermi&#39;</a>.</p>
-<ul>
-<li>Supports client-side wallets in Node.js and the browser using WebAssembly.</li>
-<li>Supports wallet and daemon RPC clients.</li>
-<li>Supports multisig, view-only, and offline wallets.</li>
-<li>Wallet types are interchangeable by conforming to a <a href="https://woodser.github.io/monero-ts/typedocs/classes/MoneroWallet.html">common interface</a>.</li>
-<li>Uses a clearly defined <a href="https://woodser.github.io/monero-java/monero-spec.pdf">data model and API specification</a> intended to be intuitive and robust.</li>
-<li><a href="docs/developer_guide/query_data_model.md">Query wallet transactions, transfers, and outputs</a> by their properties.</li>
-<li>Fetch and process binary data from the daemon (e.g. raw blocks).</li>
-<li>Receive notifications when blocks are added to the chain or when wallets sync, send, or receive.</li>
-<li>Over 300 passing Mocha tests.</li>
-</ul>
-<a id="md:architecture" class="tsd-anchor"></a><h2><a href="#md:architecture">Architecture</a></h2><p align="center">
-    <img width="85%" height="auto" src="https://raw.githubusercontent.com/woodser/monero-ts/master/docs/img/architecture.png"/><br>
-    <i>Build browser or Node.js applications using RPC or WebAssembly bindings to <a href="https://github.com/monero-project/monero">monero-project/monero</a>.  Wallet implementations are interchangeable by conforming to a common interface, <a href="https://woodser.github.io/monero-ts/typedocs/classes/MoneroWallet.html">MoneroWallet.ts</a>.</i>
-</p>
-
-<a id="md:sample-code" class="tsd-anchor"></a><h2><a href="#md:sample-code">Sample code</a></h2><pre><code class="language-typescript"><span class="hl-0">// import monero-ts (or import types individually)</span><br/><span class="hl-1">import</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2"> </span><span class="hl-1">from</span><span class="hl-2"> </span><span class="hl-4">&quot;monero-ts&quot;</span><span class="hl-2">;</span><br/><br/><span class="hl-0">// connect to daemon</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">daemon</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2">.</span><span class="hl-6">connectToDaemonRpc</span><span class="hl-2">(</span><span class="hl-4">&quot;http://localhost:28081&quot;</span><span class="hl-2">);</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">height</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">daemon</span><span class="hl-2">.</span><span class="hl-6">getHeight</span><span class="hl-2">();        </span><span class="hl-0">// 1523651</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">txsInPool</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">daemon</span><span class="hl-2">.</span><span class="hl-6">getTxPool</span><span class="hl-2">();     </span><span class="hl-0">// get transactions in the pool</span><br/><br/><span class="hl-0">// create wallet from mnemonic phrase using WebAssembly bindings to monero-project</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2">.</span><span class="hl-6">createWalletFull</span><span class="hl-2">({</span><br/><span class="hl-2">  </span><span class="hl-3">path:</span><span class="hl-2"> </span><span class="hl-4">&quot;sample_wallet_full&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">password:</span><span class="hl-2"> </span><span class="hl-4">&quot;supersecretpassword123&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">networkType:</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2">.</span><span class="hl-3">MoneroNetworkType</span><span class="hl-2">.</span><span class="hl-7">TESTNET</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">seed:</span><span class="hl-2"> </span><span class="hl-4">&quot;hefty value scenic...&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">restoreHeight:</span><span class="hl-2"> </span><span class="hl-8">573936</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">server:</span><span class="hl-2"> { </span><span class="hl-0">// provide url or MoneroRpcConnection</span><br/><span class="hl-2">    </span><span class="hl-3">uri:</span><span class="hl-2"> </span><span class="hl-4">&quot;http://localhost:28081&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">    </span><span class="hl-3">username:</span><span class="hl-2"> </span><span class="hl-4">&quot;superuser&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">    </span><span class="hl-3">password:</span><span class="hl-2"> </span><span class="hl-4">&quot;abctesting123&quot;</span><br/><span class="hl-2">  }</span><br/><span class="hl-2">});</span><br/><br/><span class="hl-0">// synchronize with progress notifications</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2">.</span><span class="hl-6">sync</span><span class="hl-2">(</span><span class="hl-5">new</span><span class="hl-2"> </span><span class="hl-5">class</span><span class="hl-2"> </span><span class="hl-5">extends</span><span class="hl-2"> </span><span class="hl-9">moneroTs</span><span class="hl-2">.</span><span class="hl-9">MoneroWalletListener</span><span class="hl-2"> {</span><br/><span class="hl-2">  </span><span class="hl-5">async</span><span class="hl-2"> </span><span class="hl-6">onSyncProgress</span><span class="hl-2">(</span><span class="hl-3">height</span><span class="hl-2">: </span><span class="hl-9">number</span><span class="hl-2">, </span><span class="hl-3">startHeight</span><span class="hl-2">: </span><span class="hl-9">number</span><span class="hl-2">, </span><span class="hl-3">endHeight</span><span class="hl-2">: </span><span class="hl-9">number</span><span class="hl-2">, </span><span class="hl-3">percentDone</span><span class="hl-2">: </span><span class="hl-9">number</span><span class="hl-2">, </span><span class="hl-3">message</span><span class="hl-2">: </span><span class="hl-9">string</span><span class="hl-2">) {</span><br/><span class="hl-2">    </span><span class="hl-0">// feed a progress bar?</span><br/><span class="hl-2">  }</span><br/><span class="hl-2">});</span><br/><br/><span class="hl-0">// synchronize in the background every 5 seconds</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2">.</span><span class="hl-6">startSyncing</span><span class="hl-2">(</span><span class="hl-8">5000</span><span class="hl-2">);</span><br/><br/><span class="hl-0">// receive notifications when funds are received, confirmed, and unlocked</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">fundsReceived</span><span class="hl-2"> = </span><span class="hl-5">false</span><span class="hl-2">;</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2">.</span><span class="hl-6">addListener</span><span class="hl-2">(</span><span class="hl-5">new</span><span class="hl-2"> </span><span class="hl-5">class</span><span class="hl-2"> </span><span class="hl-5">extends</span><span class="hl-2"> </span><span class="hl-9">moneroTs</span><span class="hl-2">.</span><span class="hl-9">MoneroWalletListener</span><span class="hl-2"> {</span><br/><span class="hl-2">  </span><span class="hl-5">async</span><span class="hl-2"> </span><span class="hl-6">onOutputReceived</span><span class="hl-2">(</span><span class="hl-3">output</span><span class="hl-2">: </span><span class="hl-9">moneroTs</span><span class="hl-2">.</span><span class="hl-9">MoneroOutputWallet</span><span class="hl-2">) {</span><br/><span class="hl-2">    </span><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">amount</span><span class="hl-2"> = </span><span class="hl-3">output</span><span class="hl-2">.</span><span class="hl-6">getAmount</span><span class="hl-2">();</span><br/><span class="hl-2">    </span><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">txHash</span><span class="hl-2"> = </span><span class="hl-3">output</span><span class="hl-2">.</span><span class="hl-6">getTx</span><span class="hl-2">().</span><span class="hl-6">getHash</span><span class="hl-2">();</span><br/><span class="hl-2">    </span><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">isConfirmed</span><span class="hl-2"> = </span><span class="hl-3">output</span><span class="hl-2">.</span><span class="hl-6">getTx</span><span class="hl-2">().</span><span class="hl-6">getIsConfirmed</span><span class="hl-2">();</span><br/><span class="hl-2">    </span><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">isLocked</span><span class="hl-2"> = </span><span class="hl-3">output</span><span class="hl-2">.</span><span class="hl-6">getTx</span><span class="hl-2">().</span><span class="hl-6">getIsLocked</span><span class="hl-2">();</span><br/><span class="hl-2">    </span><span class="hl-3">fundsReceived</span><span class="hl-2"> = </span><span class="hl-5">true</span><span class="hl-2">;</span><br/><span class="hl-2">  }</span><br/><span class="hl-2">});</span><br/><br/><span class="hl-0">// connect to wallet RPC and open wallet</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2">.</span><span class="hl-6">connectToWalletRpc</span><span class="hl-2">(</span><span class="hl-4">&quot;http://localhost:28084&quot;</span><span class="hl-2">, </span><span class="hl-4">&quot;rpc_user&quot;</span><span class="hl-2">, </span><span class="hl-4">&quot;abc123&quot;</span><span class="hl-2">);</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">openWallet</span><span class="hl-2">(</span><span class="hl-4">&quot;sample_wallet_rpc&quot;</span><span class="hl-2">, </span><span class="hl-4">&quot;supersecretpassword123&quot;</span><span class="hl-2">);</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">primaryAddress</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">getPrimaryAddress</span><span class="hl-2">(); </span><span class="hl-0">// 555zgduFhmKd2o8rPUz...</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">balance</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">getBalance</span><span class="hl-2">();   </span><span class="hl-0">// 533648366742</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">txs</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">getTxs</span><span class="hl-2">();           </span><span class="hl-0">// get transactions containing transfers to/from the wallet</span><br/><br/><span class="hl-0">// send funds from RPC wallet to WebAssembly wallet</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">createdTx</span><span class="hl-2"> = </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">createTx</span><span class="hl-2">({</span><br/><span class="hl-2">  </span><span class="hl-3">accountIndex:</span><span class="hl-2"> </span><span class="hl-8">0</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-3">address:</span><span class="hl-2"> </span><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2">.</span><span class="hl-6">getAddress</span><span class="hl-2">(</span><span class="hl-8">1</span><span class="hl-2">, </span><span class="hl-8">0</span><span class="hl-2">),</span><br/><span class="hl-2">  </span><span class="hl-3">amount:</span><span class="hl-2"> </span><span class="hl-8">250000000000</span><span class="hl-5">n</span><span class="hl-2">, </span><span class="hl-0">// send 0.25 XMR (denominated in atomic units)</span><br/><span class="hl-2">  </span><span class="hl-3">relay:</span><span class="hl-2"> </span><span class="hl-5">false</span><span class="hl-2"> </span><span class="hl-0">// create transaction and relay to the network if true</span><br/><span class="hl-2">});</span><br/><span class="hl-5">let</span><span class="hl-2"> </span><span class="hl-3">fee</span><span class="hl-2"> = </span><span class="hl-3">createdTx</span><span class="hl-2">.</span><span class="hl-6">getFee</span><span class="hl-2">(); </span><span class="hl-0">// &quot;Are you sure you want to send... ?&quot;</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletRpc</span><span class="hl-2">.</span><span class="hl-6">relayTx</span><span class="hl-2">(</span><span class="hl-3">createdTx</span><span class="hl-2">); </span><span class="hl-0">// relay the transaction</span><br/><br/><span class="hl-0">// recipient receives unconfirmed funds within 5 seconds</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-5">new</span><span class="hl-2"> </span><span class="hl-9">Promise</span><span class="hl-2">(</span><span class="hl-5">function</span><span class="hl-2">(</span><span class="hl-3">resolve</span><span class="hl-2">) { </span><span class="hl-6">setTimeout</span><span class="hl-2">(</span><span class="hl-3">resolve</span><span class="hl-2">, </span><span class="hl-8">5000</span><span class="hl-2">); });</span><br/><span class="hl-6">assert</span><span class="hl-2">(</span><span class="hl-3">fundsReceived</span><span class="hl-2">);</span><br/><br/><span class="hl-0">// save and close WebAssembly wallet</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">walletFull</span><span class="hl-2">.</span><span class="hl-6">close</span><span class="hl-2">(</span><span class="hl-5">true</span><span class="hl-2">);</span><br/><br/><span class="hl-0">// terminate any running resources (e.g. workers)</span><br/><span class="hl-1">await</span><span class="hl-2"> </span><span class="hl-3">moneroTs</span><span class="hl-2">.</span><span class="hl-6">shutdown</span><span class="hl-2">();</span>
+<h2>qwertycoin-ts</h2></div>
+<div class="tsd-panel tsd-typography"><a id="md:qwertycoin-ts" class="tsd-anchor"></a><h1><a href="#md:qwertycoin-ts">qwertycoin-ts</a></h1><p>TypeScript and WebAssembly bindings for Qwertycoin v2 wallets, daemon RPC,
+message signing, and the QMS2 encrypted-messaging backend.</p>
+<p>The WebAssembly build is compiled from the pinned source graph:</p>
+<pre><code class="language-text">qwertycoin-ts
+└── external/qwertycoin-cpp
+    └── external/qwertycoin-core
 </code><button>Copy</button></pre>
-<a id="md:documentation" class="tsd-anchor"></a><h2><a href="#md:documentation">Documentation</a></h2><ul>
-<li><a href="https://woodser.github.io/monero-ts/typedocs/">TypeDocs</a></li>
-<li><a href="https://woodser.github.io/monero-java/monero-spec.pdf">API and model overview with visual diagrams</a></li>
-<li><a href="docs/developer_guide/creating_wallets.md">Creating wallets</a></li>
-<li><a href="docs/developer_guide/data_model.md">The data model: blocks, transactions, transfers, and outputs</a></li>
-<li><a href="docs/developer_guide/query_data_model.md">Getting transactions, transfers, and outputs</a></li>
-<li><a href="docs/developer_guide/sending_funds.md">Sending funds</a></li>
-<li><a href="docs/developer_guide/multisig_wallets.md">Multisig wallets</a></li>
-<li><a href="docs/developer_guide/view_only_offline.md">View-only and offline wallets</a></li>
-<li><a href="docs/developer_guide/connection_manager.md">Connection manager</a></li>
-<li><a href="./docs/developer_guide/https_and_self_signed_certificates.md">HTTPS and self-signed certificates</a></li>
-<li><a href="docs/developer_guide/tor.md">Using Tor</a></li>
-<li><a href="src/test">Mocha tests</a></li>
-<li><a href="docs/developer_guide/installing_prerequisites.md">Installing prerequisites</a></li>
-<li><a href="docs/developer_guide/getting_started_p1.md">Getting started part 1: creating a Node.js application</a></li>
-<li><a href="docs/developer_guide/getting_started_p2.md">Getting started part 2: creating a web application</a></li>
+<p>The public package keeps its inherited API type identifiers for source and ABI
+compatibility. Active repository paths, build targets, distributable artifacts,
+and worker names use Qwertycoin branding. Original copyright, license, and
+provenance notices remain in <code>NOTICE</code>, <code>LICENSE.txt</code>, and the relevant source
+files.</p>
+<a id="md:distribution-artifacts" class="tsd-anchor"></a><h2><a href="#md:distribution-artifacts">Distribution artifacts</a></h2><p>The browser distribution produces:</p>
+<ul>
+<li><code>dist/qwertycoin.js</code> — single-file wallet WebAssembly loader;</li>
+<li><code>dist/qwertycoin.worker.js</code> — browser wallet worker;</li>
+<li><code>dist/qwertycoin.worker.js.LICENSE.txt</code> — bundled third-party notices;</li>
+<li><code>dist/qms2/</code> — separately checksummed QMS2 cryptography module and notices.</li>
 </ul>
-<a id="md:sample-projects" class="tsd-anchor"></a><h2><a href="#md:sample-projects">Sample projects</a></h2><ul>
-<li><a href="https://github.com/woodser/xmr-sample-node">Sample Node.js app</a></li>
-<li><a href="https://github.com/woodser/xmr-sample-react">Sample React app</a></li>
-<li><a href="https://github.com/woodser/xmr-sample-next">Sample Next.js app</a></li>
-<li><a href="https://github.com/woodser/xmr-sample-vite">Sample Vite app</a></li>
-<li><a href="https://github.com/woodser/xmr-sample-webpack">Sample Webpack app</a></li>
-<li><a href="https://github.com/woodser/xmr-sample-deno">Sample Deno app</a></li>
+<p>Applications can load the wallet module directly:</p>
+<pre><code class="language-ts"><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">LibraryUtils</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;./src/main/ts/common/LibraryUtils&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">module</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">LibraryUtils</span><span class="hl-1">.</span><span class="hl-6">loadWasmModule</span><span class="hl-1">();</span>
+</code><button>Copy</button></pre>
+<p>Browser applications may override the worker location before creating a wallet:</p>
+<pre><code class="language-ts"><span class="hl-2">LibraryUtils</span><span class="hl-1">.</span><span class="hl-6">setWorkerDistPath</span><span class="hl-1">(</span><span class="hl-3">&quot;/assets/qwertycoin.worker.js&quot;</span><span class="hl-1">);</span>
+</code><button>Copy</button></pre>
+<a id="md:build" class="tsd-anchor"></a><h2><a href="#md:build">Build</a></h2><p>Clone with submodules and install the pinned JavaScript dependencies:</p>
+<pre><code class="language-bash"><span class="hl-6">git</span><span class="hl-1"> </span><span class="hl-3">clone</span><span class="hl-1"> </span><span class="hl-4">--recurse-submodules</span><span class="hl-1"> </span><span class="hl-3">https://github.com/qwertycoin-org/qwertycoin-ts.git</span><br/><span class="hl-6">cd</span><span class="hl-1"> </span><span class="hl-3">qwertycoin-ts</span><br/><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">ci</span>
+</code><button>Copy</button></pre>
+<p>The complete browser build additionally requires the Emscripten, Rust,
+wasm-bindgen, Boost, OpenSSL, and Unbound versions pinned by
+<code>.github/workflows/qms-wasm-artifact.yml</code>.</p>
+<pre><code class="language-bash"><span class="hl-6">./bin/build_dist.sh</span><br/><span class="hl-2">RUSTUP_TOOLCHAIN</span><span class="hl-1">=</span><span class="hl-7">1.98</span><span class="hl-3">.1</span><span class="hl-1"> </span><span class="hl-6">./bin/build_qms_wasm.sh</span>
+</code><button>Copy</button></pre>
+<p>The CI workflow verifies the exact qwertycoin-ts → qwertycoin-cpp → Core source
+graph before building and publishes a short-lived artifact with SHA-256 evidence.</p>
+<a id="md:tests" class="tsd-anchor"></a><h2><a href="#md:tests">Tests</a></h2><pre><code class="language-bash"><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">test</span><br/><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">run</span><span class="hl-1"> </span><span class="hl-3">test:qwc-utils</span>
+</code><button>Copy</button></pre>
+<p>QMS2 also runs the Rust, native bridge, WebAssembly round-trip, manifest, and
+browser integration tests documented in the open Messenger pull requests.</p>
+<a id="md:security-and-networking" class="tsd-anchor"></a><h2><a href="#md:security-and-networking">Security and networking</a></h2><ul>
+<li>QMS2 requires ABI 3 and fails closed on mismatched modules.</li>
+<li>Browser networking remains disabled unless the embedding application provides
+the reviewed transport policy.</li>
+<li>Do not expose private wallet RPC methods to untrusted callers.</li>
+<li>Verify <code>QMS-WASM-SHA256SUMS</code>, <code>QMS2-SHA256SUMS</code>, and <code>QMS-WASM-SOURCES</code> before
+vendoring an artifact.</li>
 </ul>
-<a id="md:related-projects" class="tsd-anchor"></a><h2><a href="#md:related-projects">Related projects</a></h2><ul>
-<li><a href="https://github.com/woodser/monero-cpp">monero-cpp</a> - C++ library counterpart</li>
-<li><a href="https://github.com/woodser/monero-java">monero-java</a> - Java library counterpart</li>
-<li><a href="https://github.com/haveno-dex/haveno-ts">haveno-ts</a> - used for testing Haveno and its TypeScript library</li>
-</ul>
-<a id="md:using-monero-ts-in-your-project" class="tsd-anchor"></a><h2><a href="#md:using-monero-ts-in-your-project">Using monero-ts in your project</a></h2><ol>
-<li><code>cd your_project</code> or <code>mkdir your_project &amp;&amp; cd your_project &amp;&amp; npm init</code></li>
-<li><code>npm install monero-ts</code></li>
-<li>Add <code>import moneroTs from &quot;monero-ts&quot;</code> in your application code (or import types individually).</li>
-</ol>
-<a id="md:running-in-nodejs" class="tsd-anchor"></a><h4><a href="#md:running-in-nodejs">Running in Node.js</a></h4><p>Node 20 LTS is recommended. Alternatively, Node 16 and 18 LTS work using the <code>--experimental-wasm-threads</code> flag.</p>
-<a id="md:building-a-browser-application" class="tsd-anchor"></a><h4><a href="#md:building-a-browser-application">Building a browser application</a></h4><ol>
-<li>Bundle your application code for a browser. See <a href="https://github.com/woodser/xmr-sample-webpack">xmr-sample-webpack</a> for an example project using Webpack.</li>
-<li>Copy assets from ./dist to your web app&#39;s build directory.</li>
-</ol>
-<a id="md:using-rpc-servers" class="tsd-anchor"></a><h4><a href="#md:using-rpc-servers">Using RPC servers:</a></h4><ol>
-<li>Download and install <a href="https://web.getmonero.org/downloads/">Monero CLI</a>.</li>
-<li>Start monerod, e.g.: <code>./monerod --stagenet</code> (or use a remote daemon).</li>
-<li>Start monero-wallet-rpc, e.g.: <code>./monero-wallet-rpc --daemon-address http://localhost:38081 --stagenet --rpc-bind-port 38084 --rpc-login rpc_user:abc123 --wallet-dir ./</code></li>
-</ol>
-<a id="md:building-webassembly-binaries-from-source" class="tsd-anchor"></a><h2><a href="#md:building-webassembly-binaries-from-source">Building WebAssembly binaries from source</a></h2><p>This project uses WebAssembly to package and execute Monero&#39;s source code for a browser or other WebAssembly-supported environment.</p>
-<p>Compiled WebAssembly binaries are committed to ./dist for convenience, but these files can be built independently from source code:</p>
-<ol>
-<li>Install and activate emscripten.<ol>
-<li>Clone emscripten repository: <code>git clone https://github.com/emscripten-core/emsdk.git</code></li>
-<li><code>cd emsdk</code></li>
-<li><code>git pull &amp;&amp; ./emsdk install 3.1.66 &amp;&amp; ./emsdk activate 3.1.66 &amp;&amp; source ./emsdk_env.sh</code></li>
-<li><code>export EMSCRIPTEN=path/to/emsdk/upstream/emscripten</code> (change for your system)</li>
-</ol>
-</li>
-<li>Clone monero-ts repository: <code>git clone --recursive https://github.com/woodser/monero-ts.git</code></li>
-<li><code>cd monero-ts</code></li>
-<li><code>./bin/update_submodules.sh</code></li>
-<li>Build the monero-cpp submodule (located at ./external/monero-cpp) by following <a href="https://github.com/woodser/monero-cpp#using-monero-cpp-in-your-project">instructions</a> for your system. This will ensure all dependencies are installed. Be sure to install unbound 1.19.0 to your home directory (<code>~/unbound-1.19.0</code>).</li>
-<li><code>./bin/build_all.sh</code> (install <a href="https://github.com/monero-project/monero#dependencies">monero-project dependencies</a> as needed for your system)</li>
-</ol>
-<a id="md:running-tests" class="tsd-anchor"></a><h2><a href="#md:running-tests">Running tests</a></h2><ol>
-<li>Clone the project repository: <code>git clone https://github.com/woodser/monero-ts.git</code></li>
-<li><code>cd monero-ts</code></li>
-<li>Start RPC servers:<ol>
-<li>Download and install <a href="https://web.getmonero.org/downloads/">Monero CLI</a>.</li>
-<li>Start monerod, e.g.: <code>./monerod --testnet</code> (or use a remote daemon).</li>
-<li>Start monero-wallet-rpc, e.g.: <code>./monero-wallet-rpc --daemon-address http://localhost:38081 --testnet --rpc-bind-port 28084 --rpc-login rpc_user:abc123 --wallet-dir ./</code></li>
-</ol>
-</li>
-<li>Configure the appropriate RPC endpoints, authentication, and other settings in <a href="src/test/utils/TestUtils.ts">TestUtils.ts</a> (e.g. <code>WALLET_RPC_CONFIG</code> and <code>DAEMON_RPC_CONFIG</code>).</li>
-</ol>
-<a id="md:running-tests-in-nodejs" class="tsd-anchor"></a><h4><a href="#md:running-tests-in-nodejs">Running tests in Node.js</a></h4><ul>
-<li>Run all tests: <code>npm test</code></li>
-<li>Run tests by their description, e.g.: <code>npm run test -- --grep &quot;Can get transactions&quot;</code></li>
-</ul>
-<a id="md:running-tests-in-a-browser" class="tsd-anchor"></a><h4><a href="#md:running-tests-in-a-browser">Running tests in a browser</a></h4><ol>
-<li>Start monero-wallet-rpc servers used by tests: <code>./bin/start_wallet_rpc_test_servers.sh</code></li>
-<li>In another terminal, build browser tests: <code>./bin/build_browser_tests.sh</code></li>
-<li>Access <a href="http://localhost:8080/tests.html">http://localhost:8080/tests.html</a> in a browser to run all tests</li>
-</ol>
-<a id="md:license" class="tsd-anchor"></a><h2><a href="#md:license">License</a></h2><p>This project is licensed under MIT.</p>
-<a id="md:donations" class="tsd-anchor"></a><h2><a href="#md:donations">Donations</a></h2><p>If this library has been valuable to you, please consider donating to support its continued development.</p>
-<p align="center">
-    <img src="donate.png" width="115" height="115"/><br>
-    <code>46FR1GKVqFNQnDiFkH7AuzbUBrGQwz2VdaXTDD4jcjRE8YkkoTYTmZ2Vohsz9gLSqkj5EM6ai9Q7sBoX4FPPYJdGKQQXPVz</code>
-</p></div></div>
+<a id="md:license-and-provenance" class="tsd-anchor"></a><h2><a href="#md:license-and-provenance">License and provenance</a></h2><p>Qwertycoin-specific changes are MIT licensed unless a component states
+otherwise. QMS2 includes AGPL-3.0-licensed libsignal code; its corresponding
+source, license, rebuild information, and third-party notices must accompany
+every distributed QMS2 binary or WebAssembly build. See <code>NOTICE</code> and
+<code>dist/qms2/THIRD_PARTY.qwc-qms-crypto.md</code>.</p>
+</div></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -138,34 +85,16 @@
 <ul>
 <li>
 <ul>
-<li><a href="#md:monero-typescript-library"><span>Monero <wbr/>Type<wbr/>Script <wbr/>Library</span></a></li>
+<li><a href="#md:qwertycoin-ts"><span>qwertycoin-<wbr/>ts</span></a></li>
 <li>
 <ul>
-<li><a href="#md:architecture"><span>Architecture</span></a></li>
-<li><a href="#md:sample-code"><span>Sample code</span></a></li>
-<li><a href="#md:documentation"><span>Documentation</span></a></li>
-<li><a href="#md:sample-projects"><span>Sample projects</span></a></li>
-<li><a href="#md:related-projects"><span>Related projects</span></a></li>
-<li><a href="#md:using-monero-ts-in-your-project"><span>Using monero-<wbr/>ts in your project</span></a></li>
-<li>
-<ul>
-<li><a href="#md:running-in-nodejs"><span>Running in <wbr/>Node.js</span></a></li>
-<li>
-<ul>
-<li><a href="#md:building-a-browser-application"><span>Building a browser application</span></a></li>
-<li><a href="#md:using-rpc-servers"><span>Using RPC servers:</span></a></li></ul></li></ul></li>
-<li><a href="#md:building-webassembly-binaries-from-source"><span>Building <wbr/>Web<wbr/>Assembly binaries from source</span></a></li>
-<li><a href="#md:running-tests"><span>Running tests</span></a></li>
-<li>
-<ul>
-<li><a href="#md:running-tests-in-nodejs"><span>Running tests in <wbr/>Node.js</span></a></li>
-<li>
-<ul>
-<li><a href="#md:running-tests-in-a-browser"><span>Running tests in a browser</span></a></li></ul></li></ul></li>
-<li><a href="#md:license"><span>License</span></a></li>
-<li><a href="#md:donations"><span>Donations</span></a></li></ul></li></ul></li></ul></div></details></div>
+<li><a href="#md:distribution-artifacts"><span>Distribution artifacts</span></a></li>
+<li><a href="#md:build"><span>Build</span></a></li>
+<li><a href="#md:tests"><span>Tests</span></a></li>
+<li><a href="#md:security-and-networking"><span>Security and networking</span></a></li>
+<li><a href="#md:license-and-provenance"><span>License and provenance</span></a></li></ul></li></ul></li></ul></div></details></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>monero-ts</span></a>
+<nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>qwertycoin-ts</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base=".">
 <li><a href="enums/ConnectionType.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg>ConnectionType</a></li>
 <li><a href="enums/MoneroKeyImageSpentStatus.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg>MoneroKeyImageSpentStatus</a></li>
