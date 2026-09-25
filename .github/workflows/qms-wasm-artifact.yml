@@ -124,7 +124,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sha256sum dist/qwertycoin.js dist/qwertycoin.worker.js dist/qwertycoin.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
+          (cd dist && sha256sum qwertycoin.js qwertycoin.worker.js qwertycoin.worker.js.LICENSE.txt) | tee dist/QMS-WASM-SHA256SUMS
           (cd dist/qms2 && sha256sum -c QMS2-SHA256SUMS)
           {
             echo "qwertycoin_ts_revision=${GITHUB_SHA}"
