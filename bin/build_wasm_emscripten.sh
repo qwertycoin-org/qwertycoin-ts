@@ -31,7 +31,7 @@ cd ..
 
 # move wasm files to ./dist
 mkdir -p ./dist || exit 1
-[ -f ./build/monero.js ] \
+[ -f ./build/qwertycoin.js ] \
   && {
-    mv ./build/monero.js ./dist/
+    mv ./build/qwertycoin.js ./dist/
   }

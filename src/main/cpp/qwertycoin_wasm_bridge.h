@@ -1,8 +1,8 @@
 /**
  * Provides a bridge from WebAssembly to the Monero wallet.
  */
-#ifndef monero_wasm_bridge_h
-#define monero_wasm_bridge_h
+#ifndef qwertycoin_wasm_bridge_h
+#define qwertycoin_wasm_bridge_h
 
 #include <emscripten/bind.h>
 #include <string>
@@ -17,7 +17,7 @@ namespace tools {
   }
 }
 
-namespace monero_wasm_bridge
+namespace qwertycoin_wasm_bridge
 {
 
   // ------------------------------ UTILITIES ---------------------------------
@@ -98,7 +98,7 @@ namespace monero_wasm_bridge
   void import_outputs(int handle, const string& outputs_hex, emscripten::val callback);
   void export_key_images(int handle, bool all, emscripten::val callback);
   void import_key_images(int handle, const string& key_images_str, emscripten::val callback);
-  //  emscripten::function("get_new_key_images_from_last_import", &monero_wasm_bridge::get_new_key_images_from_last_import);
+  //  emscripten::function("get_new_key_images_from_last_import", &qwertycoin_wasm_bridge::get_new_key_images_from_last_import);
   void freeze_output(int handle, const string& key_image, emscripten::val callback);
   void thaw_output(int handle, const string& key_image, emscripten::val callback);
   void is_output_frozen(int handle, const string& key_image, emscripten::val callback);
@@ -151,4 +151,4 @@ namespace monero_wasm_bridge
   string get_cache_file_buffer(int handle);
 }
 
-#endif /* monero_wasm_bridge_h */
+#endif /* qwertycoin_wasm_bridge_h */

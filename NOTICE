@@ -7,11 +7,11 @@ Upstream:
 - https://github.com/woodser/monero-ts
 
 Wallet bridge:
-- external/monero-cpp points to the Qwertycoin bridge fork:
+- external/qwertycoin-cpp points to the Qwertycoin bridge fork:
   https://github.com/qwertycoin-org/qwertycoin-cpp
 
 Core submodule:
-- qwertycoin-cpp/external/monero-project points to the Qwertycoin v2 core
+- qwertycoin-cpp/external/qwertycoin-core points to the Qwertycoin v2 core
   repository at the pinned commit recorded by the submodule.
 
 Licensing:
