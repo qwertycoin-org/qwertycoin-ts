@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(monero-ts-wasm)
+project(qwertycoin-ts-wasm)
 
 # build with exception whitelist from file
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS wasm_exception_whitelist.txt) # reconfigure when the whitelist changes so flags are not stale
@@ -16,30 +16,30 @@ add_definitions(-DAUTO_INITIALIZE_EASYLOGGINGPP -DNO_AES)
 include_directories("src/cpp")
 
 #####################
-# monero-cpp
+# qwertycoin-cpp
 #####################
 
-set(MONERO_CPP "external/monero-cpp")
-set(MONERO_CPP_SRC "${MONERO_CPP}/src")
+set(QWERTYCOIN_CPP "external/qwertycoin-cpp")
+set(QWERTYCOIN_CPP_SRC "${QWERTYCOIN_CPP}/src")
 
 # headers
-include_directories("${MONERO_CPP_SRC}")
-include_directories("${MONERO_CPP}/external/libsodium/include")
-include_directories("${MONERO_CPP}/external/libsodium/include/sodium")
+include_directories("${QWERTYCOIN_CPP_SRC}")
+include_directories("${QWERTYCOIN_CPP}/external/libsodium/include")
+include_directories("${QWERTYCOIN_CPP}/external/libsodium/include/sodium")
 
 ##################
-# monero-project
+# Qwertycoin Core
 ##################
 
-set(MONERO_PROJECT "${MONERO_CPP}/external/monero-project")
-set(MONERO_PROJECT_SRC "${MONERO_PROJECT}/src")
+set(QWERTYCOIN_CORE "${QWERTYCOIN_CPP}/external/qwertycoin-core")
+set(QWERTYCOIN_CORE_SRC "${QWERTYCOIN_CORE}/src")
 
-# Generate version.cpp from the pinned monero-project source tree.  The core's
+# Generate version.cpp from the pinned Qwertycoin Core source tree.  The core's
 # Version.cmake assumes it is included from the core's own top-level project;
 # when included here it incorrectly treats qwertycoin-ts as SOURCE_DIR and
 # looks for qwertycoin-ts/src/version.cpp.in.  Accept an explicit revision for
 # immutable source snapshots, otherwise derive it from the pinned submodule.
-set(QWC_CORE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/${MONERO_PROJECT}")
+set(QWC_CORE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/${QWERTYCOIN_CORE}")
 if(NOT DEFINED QWC_CORE_REVISION OR QWC_CORE_REVISION STREQUAL "")
   find_package(Git QUIET)
   if(GIT_FOUND OR Git_FOUND)
@@ -68,35 +68,35 @@ configure_file(
 
 # headers
 include_directories("src/main/cpp")
-include_directories("${MONERO_PROJECT_SRC}/")
-include_directories("${MONERO_PROJECT_SRC}/checkpoints")
-include_directories("${MONERO_PROJECT_SRC}/common")
-#include_directories("${MONERO_PROJECT_SRC}/crypto")
-#include_directories("${MONERO_PROJECT_SRC}/crypto/crypto_ops_builder/include/")    # DISABLED?
-#include_directories("${MONERO_PROJECT_SRC}/crypto/crypto_ops_builder/include/sodium")    # DISABLED?
-include_directories("${MONERO_PROJECT_SRC}/cryptonote_basic")
-#include_directories("${MONERO_PROJECT_SRC}/multisig")
-#include_directories("${MONERO_PROJECT_SRC}/cryptonote_core")
-#include_directories("${MONERO_PROJECT_SRC}/cryptonote_protocol")
-#include_directories("${MONERO_PROJECT_SRC}/wallet")
-#include_directories("${MONERO_PROJECT_SRC}/rpc")
-#include_directories("${MONERO_PROJECT_SRC}/mnemonics")
-include_directories("${MONERO_PROJECT}/external/")
-include_directories("${MONERO_PROJECT}/external/easylogging++")
-include_directories("${MONERO_PROJECT}/external/rapidjson/include")
-include_directories("${MONERO_PROJECT}/external/unbound/libunbound")
-include_directories("${MONERO_PROJECT}/external/db_drivers/liblmdb")
-include_directories("${MONERO_PROJECT}/external/randomx/src")
-include_directories("${MONERO_PROJECT}/contrib/epee/include")
-include_directories("${MONERO_PROJECT}/contrib/epee/include/net")
+include_directories("${QWERTYCOIN_CORE_SRC}/")
+include_directories("${QWERTYCOIN_CORE_SRC}/checkpoints")
+include_directories("${QWERTYCOIN_CORE_SRC}/common")
+#include_directories("${QWERTYCOIN_CORE_SRC}/crypto")
+#include_directories("${QWERTYCOIN_CORE_SRC}/crypto/crypto_ops_builder/include/")    # DISABLED?
+#include_directories("${QWERTYCOIN_CORE_SRC}/crypto/crypto_ops_builder/include/sodium")    # DISABLED?
+include_directories("${QWERTYCOIN_CORE_SRC}/cryptonote_basic")
+#include_directories("${QWERTYCOIN_CORE_SRC}/multisig")
+#include_directories("${QWERTYCOIN_CORE_SRC}/cryptonote_core")
+#include_directories("${QWERTYCOIN_CORE_SRC}/cryptonote_protocol")
+#include_directories("${QWERTYCOIN_CORE_SRC}/wallet")
+#include_directories("${QWERTYCOIN_CORE_SRC}/rpc")
+#include_directories("${QWERTYCOIN_CORE_SRC}/mnemonics")
+include_directories("${QWERTYCOIN_CORE}/external/")
+include_directories("${QWERTYCOIN_CORE}/external/easylogging++")
+include_directories("${QWERTYCOIN_CORE}/external/rapidjson/include")
+include_directories("${QWERTYCOIN_CORE}/external/unbound/libunbound")
+include_directories("${QWERTYCOIN_CORE}/external/db_drivers/liblmdb")
+include_directories("${QWERTYCOIN_CORE}/external/randomx/src")
+include_directories("${QWERTYCOIN_CORE}/contrib/epee/include")
+include_directories("${QWERTYCOIN_CORE}/contrib/epee/include/net")
 
 #include_directories("${CMAKE_CURRENT_BINARY_DIR}")
-#include_directories("${MONERO_PROJECT_SRC}/wallet/api")
+#include_directories("${QWERTYCOIN_CORE_SRC}/wallet/api")
 
-include_directories("${MONERO_PROJECT}/build/release/translations")
+include_directories("${QWERTYCOIN_CORE}/build/release/translations")
 
-# generate empty crypto/wallet/ops.h to select monero-project's internal wallet crypto (supercop asm is not wasm-compatible)
-configure_file("${MONERO_PROJECT_SRC}/crypto/wallet/empty.h.in" "${CMAKE_BINARY_DIR}/generated_include/crypto/wallet/ops.h" COPYONLY)
+# generate empty crypto/wallet/ops.h to select Qwertycoin Core internal wallet crypto (supercop asm is not wasm-compatible)
+configure_file("${QWERTYCOIN_CORE_SRC}/crypto/wallet/empty.h.in" "${CMAKE_BINARY_DIR}/generated_include/crypto/wallet/ops.h" COPYONLY)
 include_directories("${CMAKE_BINARY_DIR}/generated_include")
 
 #############
@@ -184,7 +184,7 @@ set_target_properties(
 #############
 
 add_subdirectory(
-    "${MONERO_PROJECT}/external/randomx"
+    "${QWERTYCOIN_CORE}/external/randomx"
     "${CMAKE_BINARY_DIR}/randomx"
     EXCLUDE_FROM_ALL
 )
@@ -200,78 +200,78 @@ add_subdirectory(
 ################################
 
 set(
-    MONERO_WALLET_KEYS_SRC_FILES
+    QWC_WALLET_KEYS_SRC_FILES
     
-    # monero-ts WASM bridge
+    # qwertycoin-ts WASM bridge
     src/main/cpp/index.cpp
-    src/main/cpp/monero_wasm_bridge.cpp
+    src/main/cpp/qwertycoin_wasm_bridge.cpp
     
-    # monero-cpp (modified for WASM)
-    ${MONERO_CPP_SRC}/utils/gen_utils.cpp
-    ${MONERO_CPP_SRC}/utils/monero_utils.cpp
-    ${MONERO_CPP_SRC}/common/monero_rpc_connection.cpp
-    ${MONERO_CPP_SRC}/daemon/monero_daemon_model.cpp
-    ${MONERO_CPP_SRC}/wallet/monero_wallet_model.cpp
-    ${MONERO_CPP_SRC}/wallet/monero_wallet_keys.cpp
-    ${MONERO_CPP}/external/libsodium/src/crypto_verify/verify.c
+    # qwertycoin-cpp (modified for WASM)
+    ${QWERTYCOIN_CPP_SRC}/utils/gen_utils.cpp
+    ${QWERTYCOIN_CPP_SRC}/utils/monero_utils.cpp
+    ${QWERTYCOIN_CPP_SRC}/common/monero_rpc_connection.cpp
+    ${QWERTYCOIN_CPP_SRC}/daemon/monero_daemon_model.cpp
+    ${QWERTYCOIN_CPP_SRC}/wallet/monero_wallet_model.cpp
+    ${QWERTYCOIN_CPP_SRC}/wallet/monero_wallet_keys.cpp
+    ${QWERTYCOIN_CPP}/external/libsodium/src/crypto_verify/verify.c
     
-    # monero-project (modified for WASM)
+    # Qwertycoin Core (modified for WASM)
     ${CMAKE_BINARY_DIR}/version.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/cryptonote_basic_impl.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/account.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/cryptonote_format_utils.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/cryptonote_format_utils_basic.cpp
-    ${MONERO_PROJECT_SRC}/crypto/crypto.cpp
-    ${MONERO_PROJECT_SRC}/crypto/hash.c
-    ${MONERO_PROJECT_SRC}/crypto/slow-hash.c
-    ${MONERO_PROJECT_SRC}/crypto/rx-slow-hash.c
-    ${MONERO_PROJECT_SRC}/crypto/oaes_lib.c
-    ${MONERO_PROJECT_SRC}/crypto/crypto-ops.c
-    ${MONERO_PROJECT_SRC}/crypto/crypto-ops-data.c
-    ${MONERO_PROJECT_SRC}/crypto/keccak.c
-    ${MONERO_PROJECT_SRC}/crypto/chacha.c
-    ${MONERO_PROJECT_SRC}/crypto/random.c
-    ${MONERO_PROJECT_SRC}/crypto/aesb.c
-    ${MONERO_PROJECT_SRC}/crypto/tree-hash.c
-    ${MONERO_PROJECT_SRC}/crypto/hash-extra-blake.c
-    ${MONERO_PROJECT_SRC}/crypto/blake256.c
-    ${MONERO_PROJECT_SRC}/crypto/hash-extra-groestl.c
-    ${MONERO_PROJECT_SRC}/crypto/hash-extra-jh.c
-    ${MONERO_PROJECT_SRC}/crypto/hash-extra-skein.c
-    ${MONERO_PROJECT_SRC}/crypto/groestl.c
-    ${MONERO_PROJECT_SRC}/crypto/jh.c
-    ${MONERO_PROJECT_SRC}/crypto/skein.c
-    ${MONERO_PROJECT_SRC}/cryptonote_core/cryptonote_tx_utils.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/byte_stream.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/byte_slice.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/hex.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/string_tools.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/memwipe.c
-    ${MONERO_PROJECT}/contrib/epee/src/mlocker.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/mlog.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/wipeable_string.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/portable_storage.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/net_parse_helpers.cpp
-    ${MONERO_PROJECT}/contrib/epee/src/parserse_base_utils.cpp
-    ${MONERO_PROJECT_SRC}/common/base58.cpp
-    ${MONERO_PROJECT_SRC}/device/device.cpp
-    ${MONERO_PROJECT_SRC}/device/device_default.cpp
-    ${MONERO_PROJECT_SRC}/hardforks/hardforks.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig_account.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig_account_kex_impl.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig_clsag_context.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig_kex_msg.cpp
-    ${MONERO_PROJECT_SRC}/multisig/multisig_tx_builder_ringct.cpp
-    ${MONERO_PROJECT_SRC}/ringct/rctOps.cpp
-    ${MONERO_PROJECT_SRC}/ringct/rctTypes.cpp
-    ${MONERO_PROJECT_SRC}/ringct/rctCryptoOps.c
-    ${MONERO_PROJECT_SRC}/ringct/rctSigs.cpp
-    ${MONERO_PROJECT_SRC}/ringct/bulletproofs.cc
-    ${MONERO_PROJECT_SRC}/ringct/bulletproofs_plus.cc
-    ${MONERO_PROJECT_SRC}/ringct/multiexp.cc
-    ${MONERO_PROJECT_SRC}/mnemonics/electrum-words.cpp
-    ${MONERO_PROJECT}/external/easylogging++/easylogging++.cc
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/cryptonote_basic_impl.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/account.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/cryptonote_format_utils.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/cryptonote_format_utils_basic.cpp
+    ${QWERTYCOIN_CORE_SRC}/crypto/crypto.cpp
+    ${QWERTYCOIN_CORE_SRC}/crypto/hash.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/slow-hash.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/rx-slow-hash.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/oaes_lib.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/crypto-ops.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/crypto-ops-data.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/keccak.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/chacha.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/random.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/aesb.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/tree-hash.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/hash-extra-blake.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/blake256.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/hash-extra-groestl.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/hash-extra-jh.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/hash-extra-skein.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/groestl.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/jh.c
+    ${QWERTYCOIN_CORE_SRC}/crypto/skein.c
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_core/cryptonote_tx_utils.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/byte_stream.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/byte_slice.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/hex.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/string_tools.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/memwipe.c
+    ${QWERTYCOIN_CORE}/contrib/epee/src/mlocker.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/mlog.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/wipeable_string.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/portable_storage.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/net_parse_helpers.cpp
+    ${QWERTYCOIN_CORE}/contrib/epee/src/parserse_base_utils.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/base58.cpp
+    ${QWERTYCOIN_CORE_SRC}/device/device.cpp
+    ${QWERTYCOIN_CORE_SRC}/device/device_default.cpp
+    ${QWERTYCOIN_CORE_SRC}/hardforks/hardforks.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig_account.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig_account_kex_impl.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig_clsag_context.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig_kex_msg.cpp
+    ${QWERTYCOIN_CORE_SRC}/multisig/multisig_tx_builder_ringct.cpp
+    ${QWERTYCOIN_CORE_SRC}/ringct/rctOps.cpp
+    ${QWERTYCOIN_CORE_SRC}/ringct/rctTypes.cpp
+    ${QWERTYCOIN_CORE_SRC}/ringct/rctCryptoOps.c
+    ${QWERTYCOIN_CORE_SRC}/ringct/rctSigs.cpp
+    ${QWERTYCOIN_CORE_SRC}/ringct/bulletproofs.cc
+    ${QWERTYCOIN_CORE_SRC}/ringct/bulletproofs_plus.cc
+    ${QWERTYCOIN_CORE_SRC}/ringct/multiexp.cc
+    ${QWERTYCOIN_CORE_SRC}/mnemonics/electrum-words.cpp
+    ${QWERTYCOIN_CORE}/external/easylogging++/easylogging++.cc
 )
 
 ################################
@@ -279,38 +279,38 @@ set(
 ################################
 
 set(
-    MONERO_WALLET_FULL_SRC_FILES
+    QWC_WALLET_FULL_SRC_FILES
     
-    # monero-ts WASM bridge
+    # qwertycoin-ts WASM bridge
     src/main/cpp/http_client_wasm.cpp
     
-    # monero-cpp (modified for WASM)
-    ${MONERO_CPP_SRC}/wallet/monero_wallet_full.cpp
+    # qwertycoin-cpp (modified for WASM)
+    ${QWERTYCOIN_CPP_SRC}/wallet/monero_wallet_full.cpp
     
-    # monero-project (modified for WASM)
-    ${MONERO_PROJECT}/external/db_drivers/liblmdb/mdb.c
-    ${MONERO_PROJECT}/external/db_drivers/liblmdb/midl.c
-    ${MONERO_PROJECT}/contrib/epee/src/abstract_http_client.cpp
-    #${MONERO_PROJECT}/contrib/epee/src/http_auth.cpp
-    ${MONERO_PROJECT_SRC}/wallet/wallet2.cpp
-    ${MONERO_PROJECT_SRC}/wallet/message_store.cpp
-    ${MONERO_PROJECT_SRC}/wallet/message_transporter.cpp
-    ${MONERO_PROJECT_SRC}/wallet/node_rpc_proxy.cpp
-    ${MONERO_PROJECT_SRC}/wallet/wallet_rpc_payments.cpp
-    #${MONERO_PROJECT_SRC}/blockchain_db/lmdb/db_lmdb.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_core/cryptonote_tx_utils.cpp
-    ${MONERO_PROJECT_SRC}/checkpoints/checkpoints.cpp
-    ${MONERO_PROJECT_SRC}/common/perf_timer.cpp
-    ${MONERO_PROJECT_SRC}/common/threadpool.cpp
-    ${MONERO_PROJECT_SRC}/common/aligned.c
-    ${MONERO_PROJECT_SRC}/common/util.cpp
-    ${MONERO_PROJECT_SRC}/common/i18n.cpp
-    ${MONERO_PROJECT_SRC}/common/combinator.cpp
-    ${MONERO_PROJECT_SRC}/rpc/rpc_payment_signature.cpp
-    ${MONERO_PROJECT_SRC}/wallet/ringdb.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/miner.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_basic/difficulty.cpp
-    ${MONERO_PROJECT_SRC}/cryptonote_core/tx_sanity_check.cpp
+    # Qwertycoin Core (modified for WASM)
+    ${QWERTYCOIN_CORE}/external/db_drivers/liblmdb/mdb.c
+    ${QWERTYCOIN_CORE}/external/db_drivers/liblmdb/midl.c
+    ${QWERTYCOIN_CORE}/contrib/epee/src/abstract_http_client.cpp
+    #${QWERTYCOIN_CORE}/contrib/epee/src/http_auth.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/wallet2.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/message_store.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/message_transporter.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/node_rpc_proxy.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/wallet_rpc_payments.cpp
+    #${QWERTYCOIN_CORE_SRC}/blockchain_db/lmdb/db_lmdb.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_core/cryptonote_tx_utils.cpp
+    ${QWERTYCOIN_CORE_SRC}/checkpoints/checkpoints.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/perf_timer.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/threadpool.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/aligned.c
+    ${QWERTYCOIN_CORE_SRC}/common/util.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/i18n.cpp
+    ${QWERTYCOIN_CORE_SRC}/common/combinator.cpp
+    ${QWERTYCOIN_CORE_SRC}/rpc/rpc_payment_signature.cpp
+    ${QWERTYCOIN_CORE_SRC}/wallet/ringdb.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/miner.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_basic/difficulty.cpp
+    ${QWERTYCOIN_CORE_SRC}/cryptonote_core/tx_sanity_check.cpp
 )
 
 ####################
@@ -338,7 +338,7 @@ EMCC_LINKER_FLAGS_BASE
 "-Wall -Werror -Wno-js-compiler -Wl,--allow-undefined -std=c++14 -Oz -D_REENTRANT \
 --bind \
 -s MODULARIZE=1 \
--s 'EXPORT_NAME=\"monero_ts\"' \
+-s 'EXPORT_NAME=\"qwertycoin_ts\"' \
 -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
 -s ASSERTIONS=0 \
 -s EXIT_RUNTIME=0 \
@@ -377,11 +377,11 @@ message(STATUS "EMCC_LINKER_FLAGS_FULL ${EMCC_LINKER_FLAGS_FULL}")
 # Build targets
 ####################
 
-add_executable(monero ${MONERO_WALLET_FULL_SRC_FILES} ${MONERO_WALLET_KEYS_SRC_FILES})
-set_target_properties(monero PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS_FULL}")
-target_compile_definitions(monero PRIVATE BUILD_WALLET_FULL=1)
+add_executable(qwertycoin ${QWC_WALLET_FULL_SRC_FILES} ${QWC_WALLET_KEYS_SRC_FILES})
+set_target_properties(qwertycoin PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS_FULL}")
+target_compile_definitions(qwertycoin PRIVATE BUILD_WALLET_FULL=1)
 target_link_libraries(
-    monero
+    qwertycoin
     #
     #openssl_ssl
     #openssl_crypto

@@ -1,200 +1,90 @@
-# Monero TypeScript Library
+# qwertycoin-ts
 
-A TypeScript library for creating Monero applications using RPC or WebAssembly bindings to [monero v0.18.5.1 'Fluorine Fermi'](https://github.com/monero-project/monero/tree/v0.18.5.1).
+TypeScript and WebAssembly bindings for Qwertycoin v2 wallets, daemon RPC,
+message signing, and the QMS2 encrypted-messaging backend.
 
-* Supports client-side wallets in Node.js and the browser using WebAssembly.
-* Supports wallet and daemon RPC clients.
-* Supports multisig, view-only, and offline wallets.
-* Wallet types are interchangeable by conforming to a [common interface](https://woodser.github.io/monero-ts/typedocs/classes/MoneroWallet.html).
-* Uses a clearly defined [data model and API specification](https://woodser.github.io/monero-java/monero-spec.pdf) intended to be intuitive and robust.
-* [Query wallet transactions, transfers, and outputs](docs/developer_guide/query_data_model.md) by their properties.
-* Fetch and process binary data from the daemon (e.g. raw blocks).
-* Receive notifications when blocks are added to the chain or when wallets sync, send, or receive.
-* Over 300 passing Mocha tests.
+The WebAssembly build is compiled from the pinned source graph:
 
-## Architecture
-
-<p align="center">
-	<img width="85%" height="auto" src="https://raw.githubusercontent.com/woodser/monero-ts/master/docs/img/architecture.png"/><br>
-	<i>Build browser or Node.js applications using RPC or WebAssembly bindings to <a href="https://github.com/monero-project/monero">monero-project/monero</a>.  Wallet implementations are interchangeable by conforming to a common interface, <a href="https://woodser.github.io/monero-ts/typedocs/classes/MoneroWallet.html">MoneroWallet.ts</a>.</i>
-</p>
-
-## Sample code
-
-```typescript
-// import monero-ts (or import types individually)
-import moneroTs from "monero-ts";
-
-// connect to daemon
-let daemon = await moneroTs.connectToDaemonRpc("http://localhost:28081");
-let height = await daemon.getHeight();        // 1523651
-let txsInPool = await daemon.getTxPool();     // get transactions in the pool
-
-// create wallet from mnemonic phrase using WebAssembly bindings to monero-project
-let walletFull = await moneroTs.createWalletFull({
-  path: "sample_wallet_full",
-  password: "supersecretpassword123",
-  networkType: moneroTs.MoneroNetworkType.TESTNET,
-  seed: "hefty value scenic...",
-  restoreHeight: 573936,
-  server: { // provide url or MoneroRpcConnection
-    uri: "http://localhost:28081",
-    username: "superuser",
-    password: "abctesting123"
-  }
-});
-
-// synchronize with progress notifications
-await walletFull.sync(new class extends moneroTs.MoneroWalletListener {
-  async onSyncProgress(height: number, startHeight: number, endHeight: number, percentDone: number, message: string) {
-    // feed a progress bar?
-  }
-});
-
-// synchronize in the background every 5 seconds
-await walletFull.startSyncing(5000);
-
-// receive notifications when funds are received, confirmed, and unlocked
-let fundsReceived = false;
-await walletFull.addListener(new class extends moneroTs.MoneroWalletListener {
-  async onOutputReceived(output: moneroTs.MoneroOutputWallet) {
-    let amount = output.getAmount();
-    let txHash = output.getTx().getHash();
-    let isConfirmed = output.getTx().getIsConfirmed();
-    let isLocked = output.getTx().getIsLocked();
-    fundsReceived = true;
-  }
-});
-
-// connect to wallet RPC and open wallet
-let walletRpc = await moneroTs.connectToWalletRpc("http://localhost:28084", "rpc_user", "abc123");
-await walletRpc.openWallet("sample_wallet_rpc", "supersecretpassword123");
-let primaryAddress = await walletRpc.getPrimaryAddress(); // 555zgduFhmKd2o8rPUz...
-let balance = await walletRpc.getBalance();   // 533648366742
-let txs = await walletRpc.getTxs();           // get transactions containing transfers to/from the wallet
-
-// send funds from RPC wallet to WebAssembly wallet
-let createdTx = await walletRpc.createTx({
-  accountIndex: 0,
-  address: await walletFull.getAddress(1, 0),
-  amount: 250000000000n, // send 0.25 XMR (denominated in atomic units)
-  relay: false // create transaction and relay to the network if true
-});
-let fee = createdTx.getFee(); // "Are you sure you want to send... ?"
-await walletRpc.relayTx(createdTx); // relay the transaction
-
-// recipient receives unconfirmed funds within 5 seconds
-await new Promise(function(resolve) { setTimeout(resolve, 5000); });
-assert(fundsReceived);
-
-// save and close WebAssembly wallet
-await walletFull.close(true);
-
-// terminate any running resources (e.g. workers)
-await moneroTs.shutdown();
+```text
+qwertycoin-ts
+└── external/qwertycoin-cpp
+    └── external/qwertycoin-core
 ```
 
-## Documentation
+The public package keeps its inherited API type identifiers for source and ABI
+compatibility. Active repository paths, build targets, distributable artifacts,
+and worker names use Qwertycoin branding. Original copyright, license, and
+provenance notices remain in `NOTICE`, `LICENSE.txt`, and the relevant source
+files.
 
-* [TypeDocs](https://woodser.github.io/monero-ts/typedocs/)
-* [API and model overview with visual diagrams](https://woodser.github.io/monero-java/monero-spec.pdf)
-* [Creating wallets](docs/developer_guide/creating_wallets.md)
-* [The data model: blocks, transactions, transfers, and outputs](docs/developer_guide/data_model.md)
-* [Getting transactions, transfers, and outputs](docs/developer_guide/query_data_model.md)
-* [Sending funds](docs/developer_guide/sending_funds.md)
-* [Multisig wallets](docs/developer_guide/multisig_wallets.md)
-* [View-only and offline wallets](docs/developer_guide/view_only_offline.md)
-* [Connection manager](docs/developer_guide/connection_manager.md)
-* [HTTPS and self-signed certificates](./docs/developer_guide/https_and_self_signed_certificates.md)
-* [Using Tor](docs/developer_guide/tor.md)
-* [Mocha tests](src/test)
-* [Installing prerequisites](docs/developer_guide/installing_prerequisites.md)
-* [Getting started part 1: creating a Node.js application](docs/developer_guide/getting_started_p1.md)
-* [Getting started part 2: creating a web application](docs/developer_guide/getting_started_p2.md)
+## Distribution artifacts
 
-## Sample projects
+The browser distribution produces:
 
-* [Sample Node.js app](https://github.com/woodser/xmr-sample-node)
-* [Sample React app](https://github.com/woodser/xmr-sample-react)
-* [Sample Next.js app](https://github.com/woodser/xmr-sample-next)
-* [Sample Vite app](https://github.com/woodser/xmr-sample-vite)
-* [Sample Webpack app](https://github.com/woodser/xmr-sample-webpack)
-* [Sample Deno app](https://github.com/woodser/xmr-sample-deno)
+- `dist/qwertycoin.js` — single-file wallet WebAssembly loader;
+- `dist/qwertycoin.worker.js` — browser wallet worker;
+- `dist/qwertycoin.worker.js.LICENSE.txt` — bundled third-party notices;
+- `dist/qms2/` — separately checksummed QMS2 cryptography module and notices.
 
-## Related projects
+Applications can load the wallet module directly:
 
-* [monero-cpp](https://github.com/woodser/monero-cpp) - C++ library counterpart
-* [monero-java](https://github.com/woodser/monero-java) - Java library counterpart
-* [haveno-ts](https://github.com/haveno-dex/haveno-ts) - used for testing Haveno and its TypeScript library
+```ts
+import LibraryUtils from "./src/main/ts/common/LibraryUtils";
 
-## Using monero-ts in your project
+const module = await LibraryUtils.loadWasmModule();
+```
 
-1. `cd your_project` or `mkdir your_project && cd your_project && npm init`
-2. `npm install monero-ts`
-3. Add `import moneroTs from "monero-ts"` in your application code (or import types individually).
+Browser applications may override the worker location before creating a wallet:
 
-#### Running in Node.js
+```ts
+LibraryUtils.setWorkerDistPath("/assets/qwertycoin.worker.js");
+```
 
-Node 20 LTS is recommended. Alternatively, Node 16 and 18 LTS work using the `--experimental-wasm-threads` flag.
+## Build
 
-#### Building a browser application
-1. Bundle your application code for a browser. See [xmr-sample-webpack](https://github.com/woodser/xmr-sample-webpack) for an example project using Webpack.
-2. Copy assets from ./dist to your web app's build directory.
+Clone with submodules and install the pinned JavaScript dependencies:
 
-#### Using RPC servers:
-1. Download and install [Monero CLI](https://web.getmonero.org/downloads/).
-2. Start monerod, e.g.: `./monerod --stagenet` (or use a remote daemon).
-3. Start monero-wallet-rpc, e.g.: `./monero-wallet-rpc --daemon-address http://localhost:38081 --stagenet --rpc-bind-port 38084 --rpc-login rpc_user:abc123 --wallet-dir ./`
+```bash
+git clone --recurse-submodules https://github.com/qwertycoin-org/qwertycoin-ts.git
+cd qwertycoin-ts
+npm ci
+```
 
-## Building WebAssembly binaries from source
+The complete browser build additionally requires the Emscripten, Rust,
+wasm-bindgen, Boost, OpenSSL, and Unbound versions pinned by
+`.github/workflows/qms-wasm-artifact.yml`.
 
-This project uses WebAssembly to package and execute Monero's source code for a browser or other WebAssembly-supported environment.
+```bash
+./bin/build_dist.sh
+RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
+```
 
-Compiled WebAssembly binaries are committed to ./dist for convenience, but these files can be built independently from source code:
+The CI workflow verifies the exact qwertycoin-ts → qwertycoin-cpp → Core source
+graph before building and publishes a short-lived artifact with SHA-256 evidence.
 
-1. Install and activate emscripten.
-	1. Clone emscripten repository: `git clone https://github.com/emscripten-core/emsdk.git`
-	2. `cd emsdk`
-	3. `git pull && ./emsdk install 3.1.66 && ./emsdk activate 3.1.66 && source ./emsdk_env.sh`
-	4. `export EMSCRIPTEN=path/to/emsdk/upstream/emscripten` (change for your system)
-2. Clone monero-ts repository: `git clone --recursive https://github.com/woodser/monero-ts.git`
-3. `cd monero-ts`
-4. `./bin/update_submodules.sh`
-5. Build the monero-cpp submodule (located at ./external/monero-cpp) by following [instructions](https://github.com/woodser/monero-cpp#using-monero-cpp-in-your-project) for your system. This will ensure all dependencies are installed.
-6. Download and verify the Unbound 1.22.0 source archive used by CI, then set `QWC_UNBOUND_SOURCE_INCLUDE` to its `libunbound` directory. The expected archive SHA-256 is `c5dd1bdef5d5685b2cedb749158dd152c52d44f65529a34ac15cd88d4b1b3d43`.
-7. For a source snapshot without Git metadata, set `QWC_CORE_REVISION` to the pinned 9–40 character lowercase core commit id.
-8. `./bin/build_all.sh` (install [monero-project dependencies](https://github.com/monero-project/monero#dependencies) as needed for your system)
+## Tests
 
-## Running tests
+```bash
+npm test
+npm run test:qwc-utils
+```
 
-1. Clone the project repository: `git clone https://github.com/woodser/monero-ts.git`
-2. `cd monero-ts`
-3. Start RPC servers:
-	1. Download and install [Monero CLI](https://web.getmonero.org/downloads/).
-	2. Start monerod, e.g.: `./monerod --testnet` (or use a remote daemon).
-	3. Start monero-wallet-rpc, e.g.: `./monero-wallet-rpc --daemon-address http://localhost:38081 --testnet --rpc-bind-port 28084 --rpc-login rpc_user:abc123 --wallet-dir ./`
-4. Configure the appropriate RPC endpoints, authentication, and other settings in [TestUtils.ts](src/test/utils/TestUtils.ts) (e.g. `WALLET_RPC_CONFIG` and `DAEMON_RPC_CONFIG`).
+QMS2 also runs the Rust, native bridge, WebAssembly round-trip, manifest, and
+browser integration tests documented in the open Messenger pull requests.
 
-#### Running tests in Node.js
+## Security and networking
 
-* Run all tests: `npm test`
-* Run tests by their description, e.g.: `npm run test -- --grep "Can get transactions"`
+- QMS2 requires ABI 3 and fails closed on mismatched modules.
+- Browser networking remains disabled unless the embedding application provides
+  the reviewed transport policy.
+- Do not expose private wallet RPC methods to untrusted callers.
+- Verify `QMS-WASM-SHA256SUMS`, `QMS2-SHA256SUMS`, and `QMS-WASM-SOURCES` before
+  vendoring an artifact.
 
-#### Running tests in a browser
+## License and provenance
 
-1. Start monero-wallet-rpc servers used by tests: `./bin/start_wallet_rpc_test_servers.sh`
-2. In another terminal, build browser tests: `./bin/build_browser_tests.sh`
-3. Access http://localhost:8080/tests.html in a browser to run all tests
-
-## License
-
-This project is licensed under MIT.
-
-## Donations
-
-If this library has been valuable to you, please consider donating to support its continued development.
-
-<p align="center">
-	<img src="donate.png" width="115" height="115"/><br>
-	<code>46FR1GKVqFNQnDiFkH7AuzbUBrGQwz2VdaXTDD4jcjRE8YkkoTYTmZ2Vohsz9gLSqkj5EM6ai9Q7sBoX4FPPYJdGKQQXPVz</code>
-</p>
+Qwertycoin-specific changes are MIT licensed unless a component states
+otherwise. QMS2 includes AGPL-3.0-licensed libsignal code; its corresponding
+source, license, rebuild information, and third-party notices must accompany
+every distributed QMS2 binary or WebAssembly build. See `NOTICE` and
+`dist/qms2/THIRD_PARTY.qwc-qms-crypto.md`.

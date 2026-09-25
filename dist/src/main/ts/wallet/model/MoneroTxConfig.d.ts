@@ -24,6 +24,8 @@ export default class MoneroTxConfig {
     subtractFeeFrom: number[];
     /** Payment ID for the transaction. */
     paymentId: string;
+    /** Canonically serialized tx_extra bytes as lowercase hex (advanced wallet clients only). */
+    extraHex: string;
     /** Miner fee (calculated automatically). */
     fee: bigint;
     /** Transaction note saved locally with the wallet (optional). */
@@ -64,6 +66,7 @@ export default class MoneroTxConfig {
      * @param {MoneroDestination[]} [config.destinations] - addresses and amounts in a multi-destination tx
      * @param {number[]} [config.subtractFeeFrom] - list of destination indices to split the transaction fee
      * @param {string} [config.paymentId] - transaction payment ID
+     * @param {string} [config.extraHex] - canonically serialized tx_extra bytes as lowercase hex
      * @param {bigint} [config.unlockTime] - minimum height or timestamp for the transaction to unlock (default 0)
      * @param {string} [config.note] - transaction note saved locally with the wallet
      * @param {string} [config.recipientName] - recipient name saved locally with the wallet

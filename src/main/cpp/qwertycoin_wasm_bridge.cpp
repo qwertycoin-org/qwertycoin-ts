@@ -1,5 +1,5 @@
 #include <iostream>
-#include "monero_wasm_bridge.h"
+#include "qwertycoin_wasm_bridge.h"
 #include "wallet/monero_wallet_keys.h"
 #include "utils/gen_utils.h"
 #include "utils/monero_utils.h"
@@ -7,7 +7,7 @@
 #include "http_client_wasm.h"
 
 using namespace std;
-using namespace monero_wasm_bridge;
+using namespace qwertycoin_wasm_bridge;
 
 // ----------------------------- PRIVATE INNER --------------------------------
 
@@ -74,12 +74,12 @@ struct wallet_wasm_listener : public monero_wallet_listener {
 
 // ------------------------------- UTILITIES ----------------------------------
 
-void monero_wasm_bridge::set_log_level(int level)
+void qwertycoin_wasm_bridge::set_log_level(int level)
 {
   monero_utils::set_log_level(level);
 }
 
-string monero_wasm_bridge::get_integrated_address_util(int network_type, const string& standard_address, const string& payment_id)
+string qwertycoin_wasm_bridge::get_integrated_address_util(int network_type, const string& standard_address, const string& payment_id)
 {
   try {
     return monero_utils::get_integrated_address(static_cast<monero_network_type>(network_type), standard_address, payment_id).serialize();
@@ -88,7 +88,7 @@ string monero_wasm_bridge::get_integrated_address_util(int network_type, const s
   }
 }
 
-string monero_wasm_bridge::validate_address(const string& address, int network_type)
+string qwertycoin_wasm_bridge::validate_address(const string& address, int network_type)
 {
   try {
     monero_utils::validate_address(address, static_cast<monero_network_type>(network_type));
@@ -98,12 +98,12 @@ string monero_wasm_bridge::validate_address(const string& address, int network_t
   }
 }
 
-string monero_wasm_bridge::get_exception_message(int exception_ptr)
+string qwertycoin_wasm_bridge::get_exception_message(int exception_ptr)
 {
   return std::string(reinterpret_cast<std::exception *>(exception_ptr)->what());
 }
 
-string monero_wasm_bridge::malloc_binary_from_json(const std::string &buff_json)
+string qwertycoin_wasm_bridge::malloc_binary_from_json(const std::string &buff_json)
 {
   // convert json to binary string
   string buff_bin;
@@ -122,7 +122,7 @@ string monero_wasm_bridge::malloc_binary_from_json(const std::string &buff_json)
   return gen_utils::serialize(root);
 }
 
-string monero_wasm_bridge::binary_to_json(const std::string &bin_mem_info_str)
+string qwertycoin_wasm_bridge::binary_to_json(const std::string &bin_mem_info_str)
 {
   // deserialize memory address info to json
   boost::property_tree::ptree root;
@@ -141,7 +141,7 @@ string monero_wasm_bridge::binary_to_json(const std::string &bin_mem_info_str)
   return buff_json;
 }
 
-string monero_wasm_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str)
+string qwertycoin_wasm_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str)
 {
   // deserialize memory address info to json
   boost::property_tree::ptree root;
@@ -162,7 +162,7 @@ string monero_wasm_bridge::binary_blocks_to_json(const std::string &bin_mem_info
 
 // -------------------------- STATIC WALLET UTILS -----------------------------
 
-void monero_wasm_bridge::open_wallet_full(const string& password, int network_type, const string& keys_data, const string& cache_data, const string& daemon_uri, const string& daemon_username, const string& daemon_password, const string& reject_unauthorized_fn_id, bool regtest, emscripten::val callback) {
+void qwertycoin_wasm_bridge::open_wallet_full(const string& password, int network_type, const string& keys_data, const string& cache_data, const string& daemon_uri, const string& daemon_username, const string& daemon_password, const string& reject_unauthorized_fn_id, bool regtest, emscripten::val callback) {
 #if defined BUILD_WALLET_FULL
   try {
     std::shared_ptr<monero_rpc_connection> daemon_connection = std::make_shared<monero_rpc_connection>(daemon_uri, daemon_username, daemon_password);
@@ -176,7 +176,7 @@ void monero_wasm_bridge::open_wallet_full(const string& password, int network_ty
 #endif
 }
 
-void monero_wasm_bridge::create_full_wallet(const string& config_json, const string& reject_unauthorized_fn_id, emscripten::val callback) {
+void qwertycoin_wasm_bridge::create_full_wallet(const string& config_json, const string& reject_unauthorized_fn_id, emscripten::val callback) {
 #if defined BUILD_WALLET_FULL
   try {
     shared_ptr<monero_wallet_config> config = monero_wallet_config::deserialize(config_json);
@@ -191,7 +191,7 @@ void monero_wasm_bridge::create_full_wallet(const string& config_json, const str
 #endif
 }
 
-string monero_wasm_bridge::get_full_wallet_seed_languages() {
+string qwertycoin_wasm_bridge::get_full_wallet_seed_languages() {
 #if defined BUILD_WALLET_FULL
   rapidjson::Document doc;
   doc.SetObject();
@@ -202,7 +202,7 @@ string monero_wasm_bridge::get_full_wallet_seed_languages() {
 #endif
 }
 
-void monero_wasm_bridge::create_keys_wallet_random(const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::create_keys_wallet_random(const string& config_json, emscripten::val callback) {
   try {
     shared_ptr<monero_wallet_config> config = monero_wallet_config::deserialize(config_json);
     config->m_path = std::string("");
@@ -213,7 +213,7 @@ void monero_wasm_bridge::create_keys_wallet_random(const string& config_json, em
   }
 }
 
-void monero_wasm_bridge::create_keys_wallet_from_seed(const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::create_keys_wallet_from_seed(const string& config_json, emscripten::val callback) {
   try {
     shared_ptr<monero_wallet_config> config = monero_wallet_config::deserialize(config_json);
     config->m_path = std::string("");
@@ -224,7 +224,7 @@ void monero_wasm_bridge::create_keys_wallet_from_seed(const string& config_json,
   }
 }
 
-void monero_wasm_bridge::create_keys_wallet_from_keys(const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::create_keys_wallet_from_keys(const string& config_json, emscripten::val callback) {
   try {
     shared_ptr<monero_wallet_config> config = monero_wallet_config::deserialize(config_json);
     config->m_path = std::string("");
@@ -235,7 +235,7 @@ void monero_wasm_bridge::create_keys_wallet_from_keys(const string& config_json,
   }
 }
 
-string monero_wasm_bridge::get_keys_wallet_seed_languages() {
+string qwertycoin_wasm_bridge::get_keys_wallet_seed_languages() {
   rapidjson::Document doc;
   doc.SetObject();
   doc.AddMember("languages", monero_utils::to_rapidjson_val(doc.GetAllocator(), monero_wallet_keys::get_seed_languages()), doc.GetAllocator());
@@ -244,34 +244,34 @@ string monero_wasm_bridge::get_keys_wallet_seed_languages() {
 
 // ------------------------ WALLET INSTANCE METHODS ---------------------------
 
-bool monero_wasm_bridge::is_view_only(int handle) {
+bool qwertycoin_wasm_bridge::is_view_only(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->is_view_only();
 }
 
-void monero_wasm_bridge::set_daemon_connection(int handle, const string& uri, const string& username, const string& password, const string& proxy_uri, int is_trusted, emscripten::val callback) {
+void qwertycoin_wasm_bridge::set_daemon_connection(int handle, const string& uri, const string& username, const string& password, const string& proxy_uri, int is_trusted, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->set_daemon_connection(uri, username, password, proxy_uri, is_trusted < 0 ? boost::none : boost::optional<bool>(is_trusted != 0)); // trusted is unset if negative
   callback();
 }
 
-string monero_wasm_bridge::get_daemon_connection(int handle) {
+string qwertycoin_wasm_bridge::get_daemon_connection(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   std::shared_ptr<monero_rpc_connection> daemon_connection = wallet->get_daemon_connection();
   return daemon_connection == nullptr ? "" : daemon_connection->serialize();
 }
 
-bool monero_wasm_bridge::is_daemon_trusted(int handle) {
+bool qwertycoin_wasm_bridge::is_daemon_trusted(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->is_daemon_trusted();
 }
 
-void monero_wasm_bridge::is_connected_to_daemon(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::is_connected_to_daemon(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   callback((bool) wallet->is_connected_to_daemon());
 }
 
-void monero_wasm_bridge::get_daemon_max_peer_height(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_daemon_max_peer_height(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback((long) wallet->get_daemon_max_peer_height());
@@ -285,12 +285,12 @@ void monero_wasm_bridge::get_daemon_max_peer_height(int handle, emscripten::val 
 //set<monero_wallet_listener*> get_listeners(int handle);
 //  int get_network_type(int handle) const;
 
-string monero_wasm_bridge::get_version(int handle) {
+string qwertycoin_wasm_bridge::get_version(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->get_version().serialize();
 }
 
-string monero_wasm_bridge::get_seed(int handle) {
+string qwertycoin_wasm_bridge::get_seed(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_seed();
@@ -299,7 +299,7 @@ string monero_wasm_bridge::get_seed(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_seed_language(int handle) {
+string qwertycoin_wasm_bridge::get_seed_language(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_seed_language();
@@ -308,7 +308,7 @@ string monero_wasm_bridge::get_seed_language(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_public_view_key(int handle) {
+string qwertycoin_wasm_bridge::get_public_view_key(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_public_view_key();
@@ -317,7 +317,7 @@ string monero_wasm_bridge::get_public_view_key(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_private_view_key(int handle) {
+string qwertycoin_wasm_bridge::get_private_view_key(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_private_view_key();
@@ -326,7 +326,7 @@ string monero_wasm_bridge::get_private_view_key(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_public_spend_key(int handle) {
+string qwertycoin_wasm_bridge::get_public_spend_key(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_public_spend_key();
@@ -335,7 +335,7 @@ string monero_wasm_bridge::get_public_spend_key(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_private_spend_key(int handle) {
+string qwertycoin_wasm_bridge::get_private_spend_key(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     return wallet->get_private_spend_key();
@@ -344,12 +344,12 @@ string monero_wasm_bridge::get_private_spend_key(int handle) {
   }
 }
 
-string monero_wasm_bridge::get_address(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
+string qwertycoin_wasm_bridge::get_address(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->get_address(account_idx, subaddress_idx);
 }
 
-string monero_wasm_bridge::get_address_index(int handle, const string& address) {
+string qwertycoin_wasm_bridge::get_address_index(int handle, const string& address) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     monero_subaddress subaddress = wallet->get_address_index(address);
@@ -359,7 +359,7 @@ string monero_wasm_bridge::get_address_index(int handle, const string& address) 
   }
 }
 
-string monero_wasm_bridge::get_integrated_address(int handle, const string& standard_address, const string& payment_id) {
+string qwertycoin_wasm_bridge::get_integrated_address(int handle, const string& standard_address, const string& payment_id) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     monero_integrated_address integrated_address = wallet->get_integrated_address(standard_address, payment_id);
@@ -369,7 +369,7 @@ string monero_wasm_bridge::get_integrated_address(int handle, const string& stan
   }
 }
 
-string monero_wasm_bridge::decode_integrated_address(int handle, const string& integrated_address_str) {
+string qwertycoin_wasm_bridge::decode_integrated_address(int handle, const string& integrated_address_str) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     monero_integrated_address integrated_address = wallet->decode_integrated_address(integrated_address_str);
@@ -379,12 +379,12 @@ string monero_wasm_bridge::decode_integrated_address(int handle, const string& i
   }
 }
 
-void monero_wasm_bridge::get_height(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_height(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   callback((long) wallet->get_height());
 }
 
-void monero_wasm_bridge::get_daemon_height(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_daemon_height(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback((long) wallet->get_daemon_height());
@@ -393,7 +393,7 @@ void monero_wasm_bridge::get_daemon_height(int handle, emscripten::val callback)
   }
 }
 
-void monero_wasm_bridge::get_height_by_date(int handle, uint16_t year, uint8_t month, uint8_t day, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_height_by_date(int handle, uint16_t year, uint8_t month, uint8_t day, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback((long) wallet->get_height_by_date(year, month, day));
@@ -402,7 +402,7 @@ void monero_wasm_bridge::get_height_by_date(int handle, uint16_t year, uint8_t m
   }
 }
 
-void monero_wasm_bridge::is_daemon_synced(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::is_daemon_synced(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->is_daemon_synced());
@@ -411,27 +411,27 @@ void monero_wasm_bridge::is_daemon_synced(int handle, emscripten::val callback) 
   }
 }
 
-void monero_wasm_bridge::is_synced(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::is_synced(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   callback(wallet->is_synced());
 }
 
-int monero_wasm_bridge::get_network_type(int handle) {
+int qwertycoin_wasm_bridge::get_network_type(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return (int) wallet->get_network_type();
 }
 
-long monero_wasm_bridge::get_restore_height(int handle) {
+long qwertycoin_wasm_bridge::get_restore_height(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return (long) wallet->get_restore_height();
 }
 
-void monero_wasm_bridge::set_restore_height(int handle, long restore_height) {
+void qwertycoin_wasm_bridge::set_restore_height(int handle, long restore_height) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->set_restore_height(restore_height);
 }
 
-void monero_wasm_bridge::set_listener(int wallet_handle, int old_listener_handle, emscripten::val callback, emscripten::val on_sync_progress, emscripten::val on_new_block, emscripten::val on_balances_changed, emscripten::val on_output_received, emscripten::val on_output_spent) {
+void qwertycoin_wasm_bridge::set_listener(int wallet_handle, int old_listener_handle, emscripten::val callback, emscripten::val on_sync_progress, emscripten::val on_new_block, emscripten::val on_balances_changed, emscripten::val on_output_received, emscripten::val on_output_spent) {
   monero_wallet* wallet = (monero_wallet*) wallet_handle;
   try {
 
@@ -457,7 +457,7 @@ void monero_wasm_bridge::set_listener(int wallet_handle, int old_listener_handle
   }
 }
 
-void monero_wasm_bridge::sync(int handle, long start_height, emscripten::val callback) {
+void qwertycoin_wasm_bridge::sync(int handle, long start_height, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     monero_sync_result result = wallet->sync(start_height);
@@ -467,12 +467,12 @@ void monero_wasm_bridge::sync(int handle, long start_height, emscripten::val cal
   }
 }
 
-void monero_wasm_bridge::stop_syncing(int handle) {
+void qwertycoin_wasm_bridge::stop_syncing(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->stop_syncing();
 }
 
-void monero_wasm_bridge::rescan_spent(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::rescan_spent(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     wallet->rescan_spent();
@@ -482,7 +482,7 @@ void monero_wasm_bridge::rescan_spent(int handle, emscripten::val callback) {
   }
 }
 
-void monero_wasm_bridge::scan_txs(int handle, const string& args, emscripten::val callback) {
+void qwertycoin_wasm_bridge::scan_txs(int handle, const string& args, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -504,7 +504,7 @@ void monero_wasm_bridge::scan_txs(int handle, const string& args, emscripten::va
   }
 }
 
-void monero_wasm_bridge::rescan_blockchain(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::rescan_blockchain(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     wallet->rescan_blockchain();
@@ -514,7 +514,7 @@ void monero_wasm_bridge::rescan_blockchain(int handle, emscripten::val callback)
   }
 }
 
-string monero_wasm_bridge::get_balance_wallet(int handle) {
+string qwertycoin_wasm_bridge::get_balance_wallet(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize wallet balance to json string {"balance": ...}
@@ -525,7 +525,7 @@ string monero_wasm_bridge::get_balance_wallet(int handle) {
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_balance_account(int handle, const uint32_t account_idx) {
+string qwertycoin_wasm_bridge::get_balance_account(int handle, const uint32_t account_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize wallet balance to json string {"balance": ...}
@@ -536,7 +536,7 @@ string monero_wasm_bridge::get_balance_account(int handle, const uint32_t accoun
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_balance_subaddress(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
+string qwertycoin_wasm_bridge::get_balance_subaddress(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize wallet balance to json string {"balance": ...}
@@ -547,7 +547,7 @@ string monero_wasm_bridge::get_balance_subaddress(int handle, const uint32_t acc
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_unlocked_balance_wallet(int handle) {
+string qwertycoin_wasm_bridge::get_unlocked_balance_wallet(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize wallet unlocked balance to json string {"unlockedBalance": ...}
@@ -558,7 +558,7 @@ string monero_wasm_bridge::get_unlocked_balance_wallet(int handle) {
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_unlocked_balance_account(int handle, const uint32_t account_idx) {
+string qwertycoin_wasm_bridge::get_unlocked_balance_account(int handle, const uint32_t account_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize account unlocked balance to json string {"unlockedBalance": ...}
@@ -569,7 +569,7 @@ string monero_wasm_bridge::get_unlocked_balance_account(int handle, const uint32
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_unlocked_balance_subaddress(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
+string qwertycoin_wasm_bridge::get_unlocked_balance_subaddress(int handle, const uint32_t account_idx, const uint32_t subaddress_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // serialize subaddress unlocked balance to json string {"unlockedBalance": ...}
@@ -580,7 +580,7 @@ string monero_wasm_bridge::get_unlocked_balance_subaddress(int handle, const uin
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_accounts(int handle, bool include_subaddresses, const string& tag) {
+string qwertycoin_wasm_bridge::get_accounts(int handle, bool include_subaddresses, const string& tag) {
 
   // get accounts
   monero_wallet* wallet = (monero_wallet*) handle;
@@ -593,19 +593,19 @@ string monero_wasm_bridge::get_accounts(int handle, bool include_subaddresses, c
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::get_account(int handle, uint32_t account_idx, bool include_subaddresses) {
+string qwertycoin_wasm_bridge::get_account(int handle, uint32_t account_idx, bool include_subaddresses) {
   monero_wallet* wallet = (monero_wallet*) handle;
   monero_account account = wallet->get_account(account_idx, include_subaddresses);
   return account.serialize();
 }
 
-string monero_wasm_bridge::create_account(int handle, const string& label) {
+string qwertycoin_wasm_bridge::create_account(int handle, const string& label) {
   monero_wallet* wallet = (monero_wallet*) handle;
   monero_account account = wallet->create_account(label);
   return account.serialize();
 }
 
-string monero_wasm_bridge::get_subaddresses(int handle, const string& args) {
+string qwertycoin_wasm_bridge::get_subaddresses(int handle, const string& args) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // deserialize args to property tree
@@ -632,18 +632,18 @@ string monero_wasm_bridge::get_subaddresses(int handle, const string& args) {
   return gen_utils::serialize(doc);
 }
 
-string monero_wasm_bridge::create_subaddress(int handle, const uint32_t account_idx, const string& label) {
+string qwertycoin_wasm_bridge::create_subaddress(int handle, const uint32_t account_idx, const string& label) {
   monero_wallet* wallet = (monero_wallet*) handle;
   monero_subaddress subaddress = wallet->create_subaddress(account_idx, label);
   return subaddress.serialize();
 }
 
-void monero_wasm_bridge::set_subaddress_label(int handle, const uint32_t account_idx, const uint32_t subaddress_idx, const string& label) {
+void qwertycoin_wasm_bridge::set_subaddress_label(int handle, const uint32_t account_idx, const uint32_t subaddress_idx, const string& label) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->set_subaddress_label(account_idx, subaddress_idx, label);
 }
 
-void monero_wasm_bridge::get_txs(int handle, const string& tx_query_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_txs(int handle, const string& tx_query_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -668,7 +668,7 @@ void monero_wasm_bridge::get_txs(int handle, const string& tx_query_json, emscri
   }
 }
 
-void monero_wasm_bridge::get_transfers(int handle, const string& transfer_query_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_transfers(int handle, const string& transfer_query_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -699,10 +699,10 @@ void monero_wasm_bridge::get_transfers(int handle, const string& transfer_query_
   }
 }
 
-//  emscripten::function("get_incoming_transfers", &monero_wasm_bridge::TODO);
-//  emscripten::function("get_outgoing_transfers", &monero_wasm_bridge::TODO);
+//  emscripten::function("get_incoming_transfers", &qwertycoin_wasm_bridge::TODO);
+//  emscripten::function("get_outgoing_transfers", &qwertycoin_wasm_bridge::TODO);
 
-void monero_wasm_bridge::get_outputs(int handle, const string& output_query_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_outputs(int handle, const string& output_query_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -727,7 +727,7 @@ void monero_wasm_bridge::get_outputs(int handle, const string& output_query_json
   }
 }
 
-void monero_wasm_bridge::export_outputs(int handle, bool all, emscripten::val callback) {
+void qwertycoin_wasm_bridge::export_outputs(int handle, bool all, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->export_outputs(all));
@@ -736,7 +736,7 @@ void monero_wasm_bridge::export_outputs(int handle, bool all, emscripten::val ca
   }
 }
 
-void monero_wasm_bridge::import_outputs(int handle, const string& outputs_hex, emscripten::val callback) {
+void qwertycoin_wasm_bridge::import_outputs(int handle, const string& outputs_hex, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->import_outputs(outputs_hex));
@@ -745,7 +745,7 @@ void monero_wasm_bridge::import_outputs(int handle, const string& outputs_hex, e
   }
 }
 
-void monero_wasm_bridge::export_key_images(int handle, bool all, emscripten::val callback) {
+void qwertycoin_wasm_bridge::export_key_images(int handle, bool all, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->export_key_images(all)->serialize());
@@ -754,7 +754,7 @@ void monero_wasm_bridge::export_key_images(int handle, bool all, emscripten::val
   }
 }
 
-void monero_wasm_bridge::import_key_images(int handle, const string& key_images_str, emscripten::val callback) {
+void qwertycoin_wasm_bridge::import_key_images(int handle, const string& key_images_str, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     shared_ptr<monero_key_image_export_result> exported = monero_key_image_export_result::deserialize(key_images_str);
@@ -764,9 +764,9 @@ void monero_wasm_bridge::import_key_images(int handle, const string& key_images_
   }
 }
 
-//  emscripten::function("get_new_key_images_from_last_import", &monero_wasm_bridge::get_new_key_images_from_last_import);
+//  emscripten::function("get_new_key_images_from_last_import", &qwertycoin_wasm_bridge::get_new_key_images_from_last_import);
 
-void monero_wasm_bridge::freeze_output(int handle, const string& key_image, emscripten::val callback) {
+void qwertycoin_wasm_bridge::freeze_output(int handle, const string& key_image, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     wallet->freeze_output(key_image);
@@ -776,7 +776,7 @@ void monero_wasm_bridge::freeze_output(int handle, const string& key_image, emsc
   }
 }
 
-void monero_wasm_bridge::thaw_output(int handle, const string& key_image, emscripten::val callback) {
+void qwertycoin_wasm_bridge::thaw_output(int handle, const string& key_image, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     wallet->thaw_output(key_image);
@@ -786,7 +786,7 @@ void monero_wasm_bridge::thaw_output(int handle, const string& key_image, emscri
   }
 }
 
-void monero_wasm_bridge::is_output_frozen(int handle, const string& key_image, emscripten::val callback) {
+void qwertycoin_wasm_bridge::is_output_frozen(int handle, const string& key_image, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->is_output_frozen(key_image));
@@ -795,7 +795,7 @@ void monero_wasm_bridge::is_output_frozen(int handle, const string& key_image, e
   }
 }
 
-void monero_wasm_bridge::get_default_fee_priority(int handle, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_default_fee_priority(int handle, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(static_cast<int>(wallet->get_default_fee_priority()));
@@ -804,7 +804,7 @@ void monero_wasm_bridge::get_default_fee_priority(int handle, emscripten::val ca
   }
 }
 
-void monero_wasm_bridge::create_txs(int handle, const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::create_txs(int handle, const string& config_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -823,7 +823,7 @@ void monero_wasm_bridge::create_txs(int handle, const string& config_json, emscr
   }
 }
 
-void monero_wasm_bridge::sweep_output(int handle, const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::sweep_output(int handle, const string& config_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -842,7 +842,7 @@ void monero_wasm_bridge::sweep_output(int handle, const string& config_json, ems
   }
 }
 
-void monero_wasm_bridge::sweep_unlocked(int handle, const string& config_json, emscripten::val callback) {
+void qwertycoin_wasm_bridge::sweep_unlocked(int handle, const string& config_json, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -874,7 +874,7 @@ void monero_wasm_bridge::sweep_unlocked(int handle, const string& config_json, e
   }
 }
 
-void monero_wasm_bridge::sweep_dust(int handle, bool relay, emscripten::val callback) {
+void qwertycoin_wasm_bridge::sweep_dust(int handle, bool relay, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     vector<shared_ptr<monero_tx_wallet>> txs = wallet->sweep_dust(relay);
@@ -886,7 +886,7 @@ void monero_wasm_bridge::sweep_dust(int handle, bool relay, emscripten::val call
   }
 }
 
-void monero_wasm_bridge::relay_txs(int handle, const string& args, emscripten::val callback) {
+void qwertycoin_wasm_bridge::relay_txs(int handle, const string& args, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -913,7 +913,7 @@ void monero_wasm_bridge::relay_txs(int handle, const string& args, emscripten::v
   }
 }
 
-string monero_wasm_bridge::describe_tx_set(int handle, const string& tx_set_str) {
+string qwertycoin_wasm_bridge::describe_tx_set(int handle, const string& tx_set_str) {
   monero_wallet* wallet = (monero_wallet*) handle;
   shared_ptr<monero_tx_set> tx_set = monero_tx_set::deserialize(tx_set_str);
   monero_tx_set described_tx_set = wallet->describe_tx_set(*tx_set);
@@ -922,7 +922,7 @@ string monero_wasm_bridge::describe_tx_set(int handle, const string& tx_set_str)
   return monero_tx_set_json;
 }
 
-string monero_wasm_bridge::sign_txs(int handle, const string& unsigned_tx_hex) {
+string qwertycoin_wasm_bridge::sign_txs(int handle, const string& unsigned_tx_hex) {
   monero_wallet* wallet = (monero_wallet*) handle;
   monero_tx_set signed_tx_set = wallet->sign_txs(unsigned_tx_hex);
   std::string monero_tx_set_json = signed_tx_set.serialize();
@@ -930,7 +930,7 @@ string monero_wasm_bridge::sign_txs(int handle, const string& unsigned_tx_hex) {
   return monero_tx_set_json;
 }
 
-void monero_wasm_bridge::submit_txs(int handle, const string& signed_tx_hex, emscripten::val callback) {
+void qwertycoin_wasm_bridge::submit_txs(int handle, const string& signed_tx_hex, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     vector<string> tx_hashes = wallet->submit_txs(signed_tx_hex);
@@ -945,23 +945,23 @@ void monero_wasm_bridge::submit_txs(int handle, const string& signed_tx_hex, ems
   }
 }
 
-string monero_wasm_bridge::sign_message(int handle, const string& msg, uint32_t signature_type_num, uint32_t account_idx, uint32_t subaddress_idx) {
+string qwertycoin_wasm_bridge::sign_message(int handle, const string& msg, uint32_t signature_type_num, uint32_t account_idx, uint32_t subaddress_idx) {
   monero_wallet* wallet = (monero_wallet*) handle;
   monero_message_signature_type signature_type = signature_type_num == 0 ? monero_message_signature_type::SIGN_WITH_SPEND_KEY : monero_message_signature_type::SIGN_WITH_VIEW_KEY;
   return wallet->sign_message(msg, signature_type, account_idx, subaddress_idx);
 }
 
-string monero_wasm_bridge::verify_message(int handle, const string& msg, const string& address, const string& signature) {
+string qwertycoin_wasm_bridge::verify_message(int handle, const string& msg, const string& address, const string& signature) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->verify_message(msg, address, signature).serialize();
 }
 
-string monero_wasm_bridge::get_tx_key(int handle, const string& tx_hash) {
+string qwertycoin_wasm_bridge::get_tx_key(int handle, const string& tx_hash) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->get_tx_key(tx_hash);
 }
 
-void monero_wasm_bridge::check_tx_key(int handle, const string& tx_hash, const string& tx_key, const string& address, emscripten::val callback) {
+void qwertycoin_wasm_bridge::check_tx_key(int handle, const string& tx_hash, const string& tx_key, const string& address, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->check_tx_key(tx_hash, tx_key, address)->serialize());
@@ -970,7 +970,7 @@ void monero_wasm_bridge::check_tx_key(int handle, const string& tx_hash, const s
   }
 }
 
-void monero_wasm_bridge::get_tx_proof(int handle, const string& tx_hash, const string& address, const string& message, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_tx_proof(int handle, const string& tx_hash, const string& address, const string& message, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->get_tx_proof(tx_hash, address, message));
@@ -979,7 +979,7 @@ void monero_wasm_bridge::get_tx_proof(int handle, const string& tx_hash, const s
   }
 }
 
-void monero_wasm_bridge::check_tx_proof(int handle, const string& tx_hash, const string& address, const string& message, const string& signature, emscripten::val callback) {
+void qwertycoin_wasm_bridge::check_tx_proof(int handle, const string& tx_hash, const string& address, const string& message, const string& signature, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->check_tx_proof(tx_hash, address, message, signature)->serialize());
@@ -988,7 +988,7 @@ void monero_wasm_bridge::check_tx_proof(int handle, const string& tx_hash, const
   }
 }
 
-void monero_wasm_bridge::get_spend_proof(int handle, const string& tx_hash, const string& message, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_spend_proof(int handle, const string& tx_hash, const string& message, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->get_spend_proof(tx_hash, message));
@@ -997,7 +997,7 @@ void monero_wasm_bridge::get_spend_proof(int handle, const string& tx_hash, cons
   }
 }
 
-void monero_wasm_bridge::check_spend_proof(int handle, const string& tx_hash, const string& message, const string& signature, emscripten::val callback) {
+void qwertycoin_wasm_bridge::check_spend_proof(int handle, const string& tx_hash, const string& message, const string& signature, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->check_spend_proof(tx_hash, message, signature));
@@ -1006,7 +1006,7 @@ void monero_wasm_bridge::check_spend_proof(int handle, const string& tx_hash, co
   }
 }
 
-void monero_wasm_bridge::get_reserve_proof_wallet(int handle, const string& message, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_reserve_proof_wallet(int handle, const string& message, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->get_reserve_proof_wallet(message));
@@ -1015,7 +1015,7 @@ void monero_wasm_bridge::get_reserve_proof_wallet(int handle, const string& mess
   }
 }
 
-void monero_wasm_bridge::get_reserve_proof_account(int handle, uint32_t account_idx, const string& amount_str, const string& message, emscripten::val callback) {
+void qwertycoin_wasm_bridge::get_reserve_proof_account(int handle, uint32_t account_idx, const string& amount_str, const string& message, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     std::stringstream sstr(amount_str);
@@ -1027,7 +1027,7 @@ void monero_wasm_bridge::get_reserve_proof_account(int handle, uint32_t account_
   }
 }
 
-void monero_wasm_bridge::check_reserve_proof(int handle, const string& address, const string& message, const string& signature, emscripten::val callback) {
+void qwertycoin_wasm_bridge::check_reserve_proof(int handle, const string& address, const string& message, const string& signature, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     callback(wallet->check_reserve_proof(address, message, signature)->serialize());
@@ -1036,7 +1036,7 @@ void monero_wasm_bridge::check_reserve_proof(int handle, const string& address, 
   }
 }
 
-string monero_wasm_bridge::get_tx_notes(int handle, const string& args) {
+string qwertycoin_wasm_bridge::get_tx_notes(int handle, const string& args) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // deserialize args to property tree
@@ -1059,7 +1059,7 @@ string monero_wasm_bridge::get_tx_notes(int handle, const string& args) {
   return gen_utils::serialize(doc);
 }
 
-void monero_wasm_bridge::set_tx_notes(int handle, const string& args) {
+void qwertycoin_wasm_bridge::set_tx_notes(int handle, const string& args) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // deserialize args to property tree
@@ -1081,7 +1081,7 @@ void monero_wasm_bridge::set_tx_notes(int handle, const string& args) {
   wallet->set_tx_notes(tx_hashes, tx_notes);
 }
 
-string monero_wasm_bridge::get_address_book_entries(int handle, const string& args) {
+string qwertycoin_wasm_bridge::get_address_book_entries(int handle, const string& args) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // deserialize args to property tree
@@ -1104,80 +1104,80 @@ string monero_wasm_bridge::get_address_book_entries(int handle, const string& ar
   return gen_utils::serialize(doc);
 }
 
-int monero_wasm_bridge::add_address_book_entry(int handle, const string& address, const string& description) {
+int qwertycoin_wasm_bridge::add_address_book_entry(int handle, const string& address, const string& description) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->add_address_book_entry(address, description);
 }
 
-void monero_wasm_bridge::edit_address_book_entry(int handle, int index, bool set_address, const string& address, bool set_description, const string& description) {
+void qwertycoin_wasm_bridge::edit_address_book_entry(int handle, int index, bool set_address, const string& address, bool set_description, const string& description) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->edit_address_book_entry(index, set_address, address, set_description, description);
 }
 
-void monero_wasm_bridge::delete_address_book_entry(int handle, int index) {
+void qwertycoin_wasm_bridge::delete_address_book_entry(int handle, int index) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->delete_address_book_entry(index);
 }
 
-void monero_wasm_bridge::tag_accounts(int handle, const string& args) {
-  cout << "string monero_wasm_bridge::tag_accounts()" << endl;
+void qwertycoin_wasm_bridge::tag_accounts(int handle, const string& args) {
+  cout << "string qwertycoin_wasm_bridge::tag_accounts()" << endl;
   throw runtime_error("Not implemented");
 }
 
-void monero_wasm_bridge::untag_accounts(int handle, const string& args) {
-  cout << "string monero_wasm_bridge::untag_accounts()" << endl;
+void qwertycoin_wasm_bridge::untag_accounts(int handle, const string& args) {
+  cout << "string qwertycoin_wasm_bridge::untag_accounts()" << endl;
   throw runtime_error("Not implemented");
 }
 
-string monero_wasm_bridge::get_account_tags(int handle) {
-  cout << "string monero_wasm_bridge::get_account_tags()" << endl;
+string qwertycoin_wasm_bridge::get_account_tags(int handle) {
+  cout << "string qwertycoin_wasm_bridge::get_account_tags()" << endl;
   throw runtime_error("Not implemented");
 }
 
-void monero_wasm_bridge::set_account_tag_label(int handle, const string& tag, const string& label) {
-  cout << "string monero_wasm_bridge::set_account_tag_label()" << endl;
+void qwertycoin_wasm_bridge::set_account_tag_label(int handle, const string& tag, const string& label) {
+  cout << "string qwertycoin_wasm_bridge::set_account_tag_label()" << endl;
   throw runtime_error("Not implemented");
 }
 
-string monero_wasm_bridge::get_payment_uri(int handle, const string& config_json) {
+string qwertycoin_wasm_bridge::get_payment_uri(int handle, const string& config_json) {
   monero_wallet* wallet = (monero_wallet*) handle;
   shared_ptr<monero_tx_config> config = monero_tx_config::deserialize(config_json);
   return wallet->get_payment_uri(*config);
 }
 
-string monero_wasm_bridge::parse_payment_uri(int handle, const string& uri) {
+string qwertycoin_wasm_bridge::parse_payment_uri(int handle, const string& uri) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->parse_payment_uri(uri)->serialize();
 }
 
-string monero_wasm_bridge::get_attribute(int handle, const string& key) {
+string qwertycoin_wasm_bridge::get_attribute(int handle, const string& key) {
   monero_wallet* wallet = (monero_wallet*) handle;
   string value;
   if (!wallet->get_attribute(key, value)) return "";
   return value;
 }
 
-void monero_wasm_bridge::set_attribute(int handle, const string& key, const string& val) {
+void qwertycoin_wasm_bridge::set_attribute(int handle, const string& key, const string& val) {
   monero_wallet* wallet = (monero_wallet*) handle;
   wallet->set_attribute(key, val);
 }
 
-bool monero_wasm_bridge::is_multisig_import_needed(int handle) {
+bool qwertycoin_wasm_bridge::is_multisig_import_needed(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->is_multisig_import_needed();
 }
 
-string monero_wasm_bridge::get_multisig_info(int handle) {
+string qwertycoin_wasm_bridge::get_multisig_info(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->get_multisig_info().serialize();
 }
 
-string monero_wasm_bridge::prepare_multisig(int handle) {
+string qwertycoin_wasm_bridge::prepare_multisig(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->prepare_multisig();
 }
 
-void monero_wasm_bridge::make_multisig(int handle, const string& args, emscripten::val callback) {
+void qwertycoin_wasm_bridge::make_multisig(int handle, const string& args, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -1202,7 +1202,7 @@ void monero_wasm_bridge::make_multisig(int handle, const string& args, emscripte
   }
 }
 
-void monero_wasm_bridge::exchange_multisig_keys(int handle, const string& args, emscripten::val callback) {
+void qwertycoin_wasm_bridge::exchange_multisig_keys(int handle, const string& args, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -1226,12 +1226,12 @@ void monero_wasm_bridge::exchange_multisig_keys(int handle, const string& args, 
   }
 }
 
-string monero_wasm_bridge::export_multisig_hex(int handle) {
+string qwertycoin_wasm_bridge::export_multisig_hex(int handle) {
   monero_wallet* wallet = (monero_wallet*) handle;
   return wallet->export_multisig_hex();
 }
 
-void monero_wasm_bridge::import_multisig_hex(int handle, const string& args, emscripten::val callback) {
+void qwertycoin_wasm_bridge::import_multisig_hex(int handle, const string& args, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
 
@@ -1253,7 +1253,7 @@ void monero_wasm_bridge::import_multisig_hex(int handle, const string& args, ems
   }
 }
 
-void monero_wasm_bridge::sign_multisig_tx_hex(int handle, const string& multisig_tx_hex, emscripten::val callback) {
+void qwertycoin_wasm_bridge::sign_multisig_tx_hex(int handle, const string& multisig_tx_hex, emscripten::val callback) {
   try {
     monero_wallet* wallet = (monero_wallet*) handle;
     monero_multisig_sign_result result = wallet->sign_multisig_tx_hex(multisig_tx_hex);
@@ -1263,7 +1263,7 @@ void monero_wasm_bridge::sign_multisig_tx_hex(int handle, const string& multisig
   }
 }
 
-void monero_wasm_bridge::submit_multisig_tx_hex(int handle, const string& signed_multisig_tx_hex, emscripten::val callback) {
+void qwertycoin_wasm_bridge::submit_multisig_tx_hex(int handle, const string& signed_multisig_tx_hex, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     vector<string> tx_hashes = wallet->submit_multisig_tx_hex(signed_multisig_tx_hex);
@@ -1278,7 +1278,7 @@ void monero_wasm_bridge::submit_multisig_tx_hex(int handle, const string& signed
   }
 }
 
-void monero_wasm_bridge::change_wallet_password(int handle, const string& old_password, const string& new_password, emscripten::val callback) {
+void qwertycoin_wasm_bridge::change_wallet_password(int handle, const string& old_password, const string& new_password, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
   try {
     wallet->change_password(old_password, new_password);
@@ -1288,7 +1288,7 @@ void monero_wasm_bridge::change_wallet_password(int handle, const string& old_pa
   }
 }
 
-void monero_wasm_bridge::close(int handle, bool save, emscripten::val callback) {
+void qwertycoin_wasm_bridge::close(int handle, bool save, emscripten::val callback) {
   monero_wallet* wallet = (monero_wallet*) handle;
 
   // TODO: ensure http clients are being deleted
@@ -1302,7 +1302,7 @@ void monero_wasm_bridge::close(int handle, bool save, emscripten::val callback) 
   callback();
 }
 
-string monero_wasm_bridge::get_keys_file_buffer(int handle, string password, bool view_only) {
+string qwertycoin_wasm_bridge::get_keys_file_buffer(int handle, string password, bool view_only) {
 #if defined BUILD_WALLET_FULL
   // get wallet
   monero_wallet_full* wallet = (monero_wallet_full*) handle;
@@ -1325,7 +1325,7 @@ string monero_wasm_bridge::get_keys_file_buffer(int handle, string password, boo
 #endif
 }
 
-string monero_wasm_bridge::get_cache_file_buffer(int handle) {
+string qwertycoin_wasm_bridge::get_cache_file_buffer(int handle) {
 #if defined BUILD_WALLET_FULL
   // get wallet
   monero_wallet_full* wallet = (monero_wallet_full*) handle;

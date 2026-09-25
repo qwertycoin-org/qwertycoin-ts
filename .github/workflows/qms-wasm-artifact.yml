@@ -34,9 +34,9 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/monero-cpp rev-parse HEAD)" = "029116b3c1aedd086b4a4aa2f27c97965227364d"
-          test "$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)" = "81328c3e4eb275ebf184467c6adb3193572d385b"
-          grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/monero-cpp/external/monero-project/src/qms/crypto/Cargo.lock
+          test "$(git -C external/qwertycoin-cpp rev-parse HEAD)" = "7320a14f7b84cec51667516421d922acd34ee52a"
+          test "$(git -C external/qwertycoin-cpp/external/qwertycoin-core rev-parse HEAD)" = "efd0667129d52c89157cb36241a703c3becfb52f"
+          grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/qwertycoin-cpp/external/qwertycoin-core/src/qms/crypto/Cargo.lock
 
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -82,8 +82,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cmake -S external/monero-cpp/external/monero-project -B external/monero-cpp/external/monero-project/build/release -D CMAKE_BUILD_TYPE=Release -D MONERO_WALLET_CRYPTO_LIBRARY=cn
-          cmake --build external/monero-cpp/external/monero-project/build/release --target generate_translations_header
+          cmake -S external/qwertycoin-cpp/external/qwertycoin-core -B external/qwertycoin-cpp/external/qwertycoin-core/build/release -D CMAKE_BUILD_TYPE=Release -D MONERO_WALLET_CRYPTO_LIBRARY=cn
+          cmake --build external/qwertycoin-cpp/external/qwertycoin-core/build/release --target generate_translations_header
 
       - name: Cache Emscripten Boost and OpenSSL
         id: emscripten-libs
@@ -104,7 +104,7 @@ jobs:
           ./bin/build_boost_emscripten.sh
           rm build/boost/include
           mkdir build/boost/include
-          cp -R external/monero-cpp/external/boost-sdk/boost build/boost/include/
+          cp -R external/qwertycoin-cpp/external/boost-sdk/boost build/boost/include/
           ./bin/build_openssl_emscripten.sh
 
       - name: Build pinned distribution
@@ -114,7 +114,7 @@ jobs:
           npm ci
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
-          export QWC_CORE_REVISION="81328c3e4eb275ebf184467c6adb3193572d385b"
+          export QWC_CORE_REVISION="efd0667129d52c89157cb36241a703c3becfb52f"
           export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
           ./bin/build_dist.sh
           RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
@@ -124,12 +124,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sha256sum dist/monero.js dist/monero.worker.js dist/monero.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
+          sha256sum dist/qwertycoin.js dist/qwertycoin.worker.js dist/qwertycoin.worker.js.LICENSE.txt | tee dist/QMS-WASM-SHA256SUMS
           (cd dist/qms2 && sha256sum -c QMS2-SHA256SUMS)
           {
             echo "qwertycoin_ts_revision=${GITHUB_SHA}"
-            echo "qwertycoin_cpp_revision=$(git -C external/monero-cpp rev-parse HEAD)"
-            echo "core_revision=$(git -C external/monero-cpp/external/monero-project rev-parse HEAD)"
+            echo "qwertycoin_cpp_revision=$(git -C external/qwertycoin-cpp rev-parse HEAD)"
+            echo "core_revision=$(git -C external/qwertycoin-cpp/external/qwertycoin-core rev-parse HEAD)"
             echo "libsignal_revision=e8cc2dddd578859b4a029c9c94670b24ce2b616a"
             echo "rust_version=$(rustc +1.98.1 --version)"
             echo "wasm_bindgen_version=$(wasm-bindgen --version)"

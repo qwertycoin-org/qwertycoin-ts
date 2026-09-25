@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CORE_DIR="${ROOT_DIR}/external/monero-cpp/external/monero-project"
+CORE_DIR="${ROOT_DIR}/external/qwertycoin-cpp/external/qwertycoin-core"
 CRATE_DIR="${CORE_DIR}/src/qms/crypto"
 OUT_DIR="${QWC_QMS_WASM_OUT_DIR:-${ROOT_DIR}/dist/qms2}"
 CARGO_BIN="${CARGO:-cargo}"
@@ -14,7 +14,7 @@ EXPECTED_RUST="1.98.1"
 EXPECTED_ABI="3"
 export RUSTUP_TOOLCHAIN="${RUSTUP_TOOLCHAIN:-${EXPECTED_RUST}}"
 
-test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "81328c3e4eb275ebf184467c6adb3193572d385b"
+test "$(git -C "${CORE_DIR}" rev-parse HEAD)" = "efd0667129d52c89157cb36241a703c3becfb52f"
 "${CARGO_BIN}" --version
 "${RUSTC_BIN}" --version | grep -F "rustc ${EXPECTED_RUST}"
 
