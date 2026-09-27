@@ -34,8 +34,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git -C external/qwertycoin-cpp rev-parse HEAD)" = "6648ca39a7d2982fa0b13eb72f11e5b98e81417c"
-          test "$(git -C external/qwertycoin-cpp/external/qwertycoin-core rev-parse HEAD)" = "efd0667129d52c89157cb36241a703c3becfb52f"
+          test "$(git -C external/qwertycoin-cpp rev-parse HEAD)" = "46179a320807fd5f90541b3c6e61b654b07e963a"
+          test "$(git -C external/qwertycoin-cpp/external/qwertycoin-core rev-parse HEAD)" = "cd6ce02da439cd54eafbda68d952f9d88c7fd994"
           grep -F 'e8cc2dddd578859b4a029c9c94670b24ce2b616a' external/qwertycoin-cpp/external/qwertycoin-core/src/qms/crypto/Cargo.lock
 
       - name: Setup Node.js
@@ -114,7 +114,7 @@ jobs:
           npm ci
           source ./emsdk/emsdk_env.sh
           export EMSCRIPTEN="${EMSDK}/upstream/emscripten"
-          export QWC_CORE_REVISION="efd0667129d52c89157cb36241a703c3becfb52f"
+          export QWC_CORE_REVISION="cd6ce02da439cd54eafbda68d952f9d88c7fd994"
           export QWC_UNBOUND_SOURCE_INCLUDE="${HOME}/unbound-1.22.0/libunbound"
           ./bin/build_dist.sh
           RUSTUP_TOOLCHAIN=1.98.1 ./bin/build_qms_wasm.sh
