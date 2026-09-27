@@ -81,10 +81,10 @@ jobs:
           ./emsdk/emsdk install 3.1.66
           ./emsdk/emsdk activate 3.1.66
 
-      - name: Build monero-project translations
+      - name: Build Qwertycoin Core translations
         run: |
-          cmake -S external/monero-cpp/external/monero-project -B external/monero-cpp/external/monero-project/build/release -D CMAKE_BUILD_TYPE=Release -D MONERO_WALLET_CRYPTO_LIBRARY=cn # cn generates portable ops.h for wasm; auto selects host asm
-          cmake --build external/monero-cpp/external/monero-project/build/release --target generate_translations_header
+          cmake -S external/qwertycoin-cpp/external/qwertycoin-core -B external/qwertycoin-cpp/external/qwertycoin-core/build/release -D CMAKE_BUILD_TYPE=Release -D MONERO_WALLET_CRYPTO_LIBRARY=cn # cn generates portable ops.h for wasm; auto selects host asm
+          cmake --build external/qwertycoin-cpp/external/qwertycoin-core/build/release --target generate_translations_header
 
       - name: Cache emscripten boost and openssl
         id: cache-emscripten-libs
@@ -104,7 +104,7 @@ jobs:
           # replace boost-sdk symlink with real headers so the cached directory is self-contained
           rm build/boost/include
           mkdir build/boost/include
-          cp -R external/monero-cpp/external/boost-sdk/boost build/boost/include/
+          cp -R external/qwertycoin-cpp/external/boost-sdk/boost build/boost/include/
 
       - name: Build openssl
         if: steps.cache-emscripten-libs.outputs.cache-hit != 'true'

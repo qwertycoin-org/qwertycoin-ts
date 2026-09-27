@@ -3,7 +3,7 @@
 . $(dirname $0)/download_deps.sh
 [ -f $(dirname $0)/colors.sh ] && . $(dirname $0)/colors.sh
 
-SRC_DIR="external/monero-cpp/external/boost-sdk"
+SRC_DIR="external/qwertycoin-cpp/external/boost-sdk"
 INSTALL_DIR="build/boost"
 
 SRC_PATH="$(pwd)/$SRC_DIR"

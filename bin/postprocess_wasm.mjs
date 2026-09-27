@@ -1,7 +1,7 @@
 import fs from "fs";
 import { Buffer } from "buffer";
 
-const fileNames = ["./build/monero.js"];
+const fileNames = ["./build/qwertycoin.js"];
 
 const postprocess = async (fileName) => {
   // read input file

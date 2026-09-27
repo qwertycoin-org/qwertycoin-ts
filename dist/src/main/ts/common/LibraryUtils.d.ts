@@ -63,8 +63,8 @@ export default class LibraryUtils {
      */
     static isRejectUnauthorized(fnId: any): any;
     /**
-     * Set the path to load the worker. Defaults to "/monero.worker.js" in the browser
-     * and "./MoneroWebWorker.js" in node.
+     * Set the path to load the worker. Defaults to "/qwertycoin.worker.js" in the browser
+     * and "./QwertycoinWebWorker.js" in node.
      *
      * @param {string} workerDistPath - path to load the worker
      */
@@ -73,7 +73,7 @@ export default class LibraryUtils {
      * Set the worker loader closure to customize worker loading.
      * Takes precedence over default loading mechanisms.
      *
-     * Could be as simple as `() => new Worker(new URL("monero-ts/dist/monero.worker.js", import.meta.url));` for browsers.
+     * Could be as simple as `() => new Worker(new URL("qwertycoin-ts/dist/qwertycoin.worker.js", import.meta.url));` for browsers.
      *
      * @param {function} loader - loader function which instantiates a worker
      */
@@ -88,7 +88,7 @@ export default class LibraryUtils {
     static removeWorkerCallback(objectId: any, callbackId: any): void;
     static removeWorkerObject(objectId: any): void;
     /**
-     * Terminate monero-ts's singleton worker.
+     * Terminate qwertycoin-ts's singleton worker.
      */
     static terminateWorker(): Promise<void>;
     /**

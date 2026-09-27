@@ -10,7 +10,7 @@ cryptography in JavaScript.
 
 - `qwertycoin-ts` is derived from `woodser/monero-ts`.
 - `qwertycoin-cpp` is derived from `woodser/monero-cpp`.
-- `qwertycoin-cpp/external/monero-project` points to the Qwertycoin v2 core
+- `qwertycoin-cpp/external/qwertycoin-core` points to the Qwertycoin v2 core
   repository.
 
 ## Pinned QWC Core
@@ -56,13 +56,13 @@ The first WebAssembly build passed in a Docker-based Emscripten environment on
 - QWC core source: historical pre-migration PoC snapshot
 - Bridge source: historical pre-migration `qwertycoin-cpp` snapshot
 - Engine source: historical pre-migration `qwertycoin-ts` snapshot
-- Output: `dist/monero.js` and `dist/monero.worker.js`
+- Output: `dist/qwertycoin.js` and `dist/qwertycoin.worker.js`
 
 Artifact checksums from the first successful spike build:
 
 ```text
-a9d47b1715410a5a3cd122707b09b2eff72459085c72519b279f5a07ea9c4ce5  dist/monero.js
-c03493d3431b0880ad96b253f7b532854da2e91cc0f3837c0d04c5a88a400f25  dist/monero.worker.js
+a9d47b1715410a5a3cd122707b09b2eff72459085c72519b279f5a07ea9c4ce5  dist/qwertycoin.js
+c03493d3431b0880ad96b253f7b532854da2e91cc0f3837c0d04c5a88a400f25  dist/qwertycoin.worker.js
 ```
 
 The same build was repeated directly in Docker on a second controlled Linux host while
@@ -80,8 +80,8 @@ GitHub Actions was unavailable due to account minute/billing limits:
 The direct Docker build produced identical artifact checksums:
 
 ```text
-a9d47b1715410a5a3cd122707b09b2eff72459085c72519b279f5a07ea9c4ce5  dist/monero.js
-c03493d3431b0880ad96b253f7b532854da2e91cc0f3837c0d04c5a88a400f25  dist/monero.worker.js
+a9d47b1715410a5a3cd122707b09b2eff72459085c72519b279f5a07ea9c4ce5  dist/qwertycoin.js
+c03493d3431b0880ad96b253f7b532854da2e91cc0f3837c0d04c5a88a400f25  dist/qwertycoin.worker.js
 ```
 
 A later full-wallet sync smoke exposed that the keys-only build path was not
@@ -100,8 +100,8 @@ Updated full-wallet sync build:
 Updated artifact checksums:
 
 ```text
-976cf7f41200b38a03383623dab9e151f44d297468bfd265f1ddcd3d333cfffe  dist/monero.js
-8289d09e18e372c554786106d98cd4452244635d5f948271e08a46cfd134ff1e  dist/monero.worker.js
+976cf7f41200b38a03383623dab9e151f44d297468bfd265f1ddcd3d333cfffe  dist/qwertycoin.js
+8289d09e18e372c554786106d98cd4452244635d5f948271e08a46cfd134ff1e  dist/qwertycoin.worker.js
 ```
 
 The first full-wallet sync smoke against the live restricted QWC node passed:

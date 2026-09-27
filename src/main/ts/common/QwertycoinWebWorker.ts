@@ -225,7 +225,7 @@ self.daemonGetTxs = async function(daemonId, txHashes, prune) {
   // get txs
   let txs = await self.WORKER_OBJECTS[daemonId].getTxs(txHashes, prune);
   
-  // collect unique blocks to preserve model relationships as trees (based on monero_wasm_bridge.cpp::get_txs)
+  // collect unique blocks to preserve model relationships as trees (based on qwertycoin_wasm_bridge.cpp::get_txs)
   let blocks = [];
   let unconfirmedBlock = undefined
   let seenBlocks = new Set();
@@ -690,7 +690,7 @@ self.getTxs = async function(walletId, blockJsonQuery) {
   // get txs
   let txs = await self.WORKER_OBJECTS[walletId].getTxs(query);
   
-  // collect unique blocks to preserve model relationships as trees (based on monero_wasm_bridge.cpp::get_txs)
+  // collect unique blocks to preserve model relationships as trees (based on qwertycoin_wasm_bridge.cpp::get_txs)
   let seenBlocks = new Set();
   let unconfirmedBlock = undefined;
   let blocks = [];

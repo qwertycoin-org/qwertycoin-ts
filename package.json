@@ -24,7 +24,7 @@
     "LICENSE.txt"
   ],
   "imports": {
-    "#monero-ts/monero.js": "./dist/monero.js"
+    "#qwertycoin-ts/qwertycoin.js": "./dist/qwertycoin.js"
   },
   "scripts": {
     "start": "todo",
