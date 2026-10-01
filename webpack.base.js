@@ -49,7 +49,7 @@ let configBase = {
         //buffer: require.resolve('buffer'),
         //console: require.resolve('console-browserify'),
         //constants: require.resolve('constants-browserify'),
-        crypto: require.resolve('crypto-browserify'),
+        crypto: false, // wallet cryptography is provided by the reviewed WASM/CryptoJS paths
         dns: false, // proxied requests are unsupported in the browser
         //domain: require.resolve('domain-browser'),
         //events: require.resolve('events'),
