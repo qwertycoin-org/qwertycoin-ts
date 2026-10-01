@@ -50,6 +50,10 @@ cd qwertycoin-ts
 npm ci
 ```
 
+Node.js 20 or newer is required. Pull requests run the locked dependency tree,
+audit, typecheck, CommonJS and browser-worker builds, and offline wallet utility
+tests on Node.js 20, 22, and 24.
+
 The complete browser build additionally requires the Emscripten, Rust,
 wasm-bindgen, Boost, OpenSSL, and Unbound versions pinned by
 `.github/workflows/qms-wasm-artifact.yml`.
@@ -71,6 +75,11 @@ npm run test:qwc-utils
 
 QMS2 also runs the Rust, native bridge, WebAssembly round-trip, manifest, and
 browser integration tests documented in the open Messenger pull requests.
+
+Package publication is guarded by `prepublishOnly`, which reruns the production
+dependency audit, typecheck, CommonJS and browser-worker builds, and offline
+wallet utility tests. Do not bypass this gate or publish from an unlocked
+dependency tree.
 
 ## Security and networking
 

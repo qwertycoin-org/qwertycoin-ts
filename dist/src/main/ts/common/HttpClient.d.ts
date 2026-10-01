@@ -58,5 +58,5 @@ export default class HttpClient {
     protected static getNonAgentTimeout(): number;
     protected static applyTimeouts(agent: any): any;
     protected static requestAxios(req: any): Promise<any>;
-    protected static axiosDigestAuthRequest: (method: any, url: any, username: any, password: any, body: any, proxyUri?: any, rejectUnauthorized?: any) => Promise<import("axios").AxiosResponse<any, any>>;
+    protected static axiosDigestAuthRequest: (method: any, url: any, username: any, password: any, body: any, proxyUri?: any, rejectUnauthorized?: any) => Promise<import("axios").AxiosResponse<any, any, {}, any>>;
 }
