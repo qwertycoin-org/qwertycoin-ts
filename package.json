@@ -34,6 +34,7 @@
     "test:qwc-utils": "npm run build_commonjs && node --enable-source-maps node_modules/mocha/bin/mocha.js --require @babel/register \"dist/src/test/TestQwertycoinUtils\" --timeout 900000000 --exit",
     "typecheck": "tsc --noEmit",
     "verify:publish": "npm audit --omit=dev --audit-level=moderate && npm run typecheck && npm run build_commonjs && npm run build_web_worker && npm run test:qwc-utils",
+    "verify:dist-deterministic": "node scripts/verify-deterministic-dist.mjs",
     "prepublishOnly": "npm run verify:publish",
     "typedoc": "typedoc ./index.ts --out ./docs/typedocs --excludePrivate --disableSources",
     "build_commonjs": "babel ./src  --extensions \".js,.ts\" --out-dir ./dist/src && babel ./index.ts  --extensions \".ts\" --out-dir ./dist",

@@ -17,6 +17,10 @@ and worker names use Qwertycoin branding. Original copyright, license, and
 provenance notices remain in `NOTICE`, `LICENSE.txt`, and the relevant source
 files.
 
+The committed C++ and transitive Core gitlinks are compatibility boundaries.
+The reviewed Core, GUI, C++ bridge, and TypeScript/WASM pins are recorded in
+the [canonical compatibility matrix](https://github.com/qwertycoin-org/qwertycoin/blob/main/docs/releases/COMPATIBILITY.md).
+
 ## Distribution artifacts
 
 The browser distribution produces:
